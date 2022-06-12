@@ -8,7 +8,11 @@ define('pagename', $originalPageName);
     <div class="floatright">
         <?php 
         if (isset($_SESSION['username'])) {
-            echo htmlspecialchars($_SESSION['username']);
+            echo userlink($_SESSION['username']);
+            $currentUserID = $_SESSION['userid'];
+            if (file_exists(__DIR__ . "/users/data/$currentUserID/newMessages.json")) {
+                ?><a class="newmessages" href="index.php?title=User+talk:<?php echo htmlspecialchars(urlencode($_SESSION['username'])); ?>">You have new messages</a><?php
+            }
             ?> (<a href="index.php?title=Special:logout">log out</a>)<?php
         } else {
             ?> not logged in (<a href="index.php?title=Special:login">log in</a>) (<a href="index.php?title=Special:signup">create account</a>)<?php

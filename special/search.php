@@ -17,6 +17,7 @@ if (!$query) {
     return;
 }
 ?>
+<p>Go to the page <a href="index.php?title=<?php echo htmlspecialchars(urlencode($query)); ?>"><?php echo htmlspecialchars($query); ?></a>?</p>
 <h2>You may be looking for...</h2>
 <ul>
 <?php 

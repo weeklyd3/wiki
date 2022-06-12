@@ -216,3 +216,12 @@ body#baudy {
     top: -8888px;
     left: -3328px;
 }
+.newmessages {
+    background-color: gold;
+    padding: 5px;
+    display: inline-block;
+    border-radius: 5px;
+    color: black;
+    text-decoration: none;
+    margin: 3px;
+}

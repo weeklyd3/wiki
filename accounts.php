@@ -70,5 +70,5 @@ function login(string $username, string $password): int {
     return 1;
 }
 function userlink(string $username): string {
-    return '<a href="index.php?title=User:' . htmlspecialchars(urlencode($username)) . '">' . htmlspecialchars($username) . '</a>';
+    return '<a href="index.php?title=User:' . htmlspecialchars(urlencode($username)) . '">' . htmlspecialchars($username) . '</a> (<a href="index.php?title=User+talk:' . htmlspecialchars(urlencode($username)) . '">leave a message</a>)';
 }
