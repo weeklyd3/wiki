@@ -14,7 +14,7 @@ function createAccount(string $username, string $password, array $groups = array
     if (isset($name2id->$username)) return false;
     $name2id->$username = $currentUID;
     fwrite(fopen('users/name2ID.json', 'w+'), json_encode($name2id));
-    mkdir("users/data/$currentUID", 0777, true);
+    mkdir(__DIR__ . "/users/data/$currentUID", 0777, true);
     $user = new stdClass;
     $user->creationDate = time();
     $user->username = $username;
@@ -32,7 +32,7 @@ function createAccount(string $username, string $password, array $groups = array
         $group2id->$group = $currentGroupID;
         fwrite(fopen("users/group2ID.json", "w+"), json_encode($group2id));
         fwrite(fopen("users/currentGroupID.json", "w+"), $currentGroupID + 1);
-        mkdir("users/groups/$currentGroupID", true);
+        mkdir(__DIR__ . "/users/groups/$currentGroupID", true);
         $groupi = new stdClass;
         $groupi->name = $group;
         $groupi->created = time();
