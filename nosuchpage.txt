@@ -1,0 +1,3 @@
+We are sorry, but we currently do not have a page with the exact title **$1**.
+
+To create a page called "$1", please click <a href="index.php?title=$2&action=edit">here</a>.
