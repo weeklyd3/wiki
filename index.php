@@ -69,12 +69,12 @@ else {
             <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="post">
                 <label>
                     Page contents:<div></div>
-                    <textarea style="box-sizing: border-box; width: 100%;" rows="10" name="contents"><?php echo htmlspecialchars(file_get_contents("pages/data/$id/page.md")); ?></textarea>
+                    <textarea style="box-sizing: border-box; width: 100%;" rows="10" name="contents"><?php if (isset($_POST['contents'])) echo htmlspecialchars($_POST['contents']); else echo htmlspecialchars(file_get_contents("pages/data/$id/page.md")); ?></textarea>
                 </label>
                 <div></div>
                 <label>
                     Briefly describe what you changed:<div></div>
-                    <input name="summary" style="box-sizing: border-box; width: 100%;" type="text" />
+                    <input name="summary" style="box-sizing: border-box; width: 100%;" type="text" value="<?php echo isset($_POST['summary']) ? htmlspecialchars($_POST['summary']) : ""; ?>" />
                 </label>
                 <div></div>
                 <input type="submit" name="save" value="Save page" />
