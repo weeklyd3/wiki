@@ -38,6 +38,9 @@ class Parsedown
         $purifier = new HTMLPurifier($config);
         $clean_html = $purifier->purify($markup);
 
+        require __DIR__ . '/mediawikilike.php';
+        $clean_html = parseMediawiki($clean_html);
+
         return $clean_html;
     }
 
