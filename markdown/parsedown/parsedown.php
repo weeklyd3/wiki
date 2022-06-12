@@ -24,6 +24,7 @@ class Parsedown
 
     function text($text)
     {
+        $currentuser = $_SESSION['username'];
         $Elements = $this->textElements($text);
 
         # convert to markup
