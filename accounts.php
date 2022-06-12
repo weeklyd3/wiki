@@ -2,6 +2,10 @@
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     die('<h1>STALP HECKING</h1>');
 }
+function userinfo(int $id): ?object {
+    if (!is_dir(__DIR__ . "/users/data/$id")) return null;
+    return json_decode(file_get_contents(__DIR__ . "/users/data/$id/user.json"));
+}
 /* 
     Return codes:
     true:  success
@@ -32,7 +36,7 @@ function createAccount(string $username, string $password, array $groups = array
         $group2id->$group = $currentGroupID;
         fwrite(fopen("users/group2ID.json", "w+"), json_encode($group2id));
         fwrite(fopen("users/currentGroupID.json", "w+"), $currentGroupID + 1);
-        mkdir(__DIR__ . "/users/groups/$currentGroupID", true);
+        mkdir(__DIR__ . "/users/groups/$currentGroupID", 0777, true);
         $groupi = new stdClass;
         $groupi->name = $group;
         $groupi->created = time();
@@ -64,4 +68,7 @@ function login(string $username, string $password): int {
         return 0;
     }
     return 1;
+}
+function userlink(string $username): string {
+    return '<a href="index.php?title=User:' . htmlspecialchars(urlencode($username)) . '">' . htmlspecialchars($username) . '</a>';
 }

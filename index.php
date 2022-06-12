@@ -11,10 +11,6 @@ if (!defined('installed') && ($_GET['title'] ?? 'poo poo') !== 'Special:install'
     header('Location: index.php?title=Special:install');
     $title = 'Special:install';
 }
-function userinfo(int $id): ?object {
-    if (!is_dir(__DIR__ . "/users/data/$id")) return null;
-    return json_decode(file_get_contents(__DIR__ . "/users/data/$id/user.json"));
-}
 $originalPageName = $title;
 $action = isset($_GET['action']) ? $_GET['action'] : "";
 

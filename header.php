@@ -31,5 +31,12 @@ define('pagename', $originalPageName);
             <input type="hidden" name="action" value="history" />
             <input type="submit" value="Revisions" <?php if (substr(pagename, 0, 8) === "Special:") { ?>disabled="disabled" <?php } ?>/>
         </form>
+        <div class="floatright">
+            <form action="index.php" method="GET">
+                <input type="hidden" name="title" value="Special:search" />
+                <label><span class="hidden2eyes">Search this wiki: </span><input type="search" name="query" placeholder="Search in <?php echo htmlspecialchars($sitename); ?>" /></label>
+                <input type="submit" value="Search" />
+            </form>
+        </div>
     </div>
 </header>

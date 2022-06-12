@@ -211,3 +211,8 @@ body#baudy {
 .clear {
     clear: both;
 }
+.hidden2eyes {
+    position: fixed;
+    top: -8888px;
+    left: -3328px;
+}
