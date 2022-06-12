@@ -10,7 +10,7 @@ class revision {
 function modifyPage(string $name, string $contents, string $editSummary): bool {
     if (!isset($_SESSION['username'])) return false;
     $currentuser = $_SESSION['username'];
-    $contents = str_replace("~~~~", "[[User:$currentuser|$currentuser]] ([[User talk:$currentuser|Leave this user a message]])", $contents);
+    $contents = str_replace("~~~~", "<span class=\"signature\">[[User:$currentuser|$currentuser]] ([[User talk:$currentuser|Leave this user a message]]) " . formatDate(time()) . '</span>', $contents);
     $page2ID = json_decode(file_get_contents(__DIR__ . '/pages/page2ID.json'));
     if (!isset($page2ID->$name)) {
         $currentID = json_decode(file_get_contents(__DIR__ . '/pages/currentPageID.json'));
