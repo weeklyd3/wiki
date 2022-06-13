@@ -20,6 +20,10 @@ if (substr($originalPageName, 0, strlen('User talk:')) === 'User talk:' && isset
     $currentUserID = $_SESSION['userid'];
     if (file_exists(__DIR__ . "/users/data/$currentUserID/newMessages.json") && $userTalkPageName === $_SESSION['username']) unlink(__DIR__ . "/users/data/$currentUserID/newMessages.json");
 }
+if (isset($_GET['raw'])) {
+    renderPage(explode(":", $title)[0], $title);
+    exit(0);
+}
 if (!$action) renderPage(explode(":", $title)[0], $title);
 else {
     switch ($action) {

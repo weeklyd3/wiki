@@ -33,5 +33,16 @@ function modifyPage(string $name, string $contents, string $editSummary): bool {
     else $revisions = array();
     array_unshift($revisions, new revision($editSummary, $revisionID));
     fwrite(fopen(__DIR__ . "/pages/data/$id/revisions.json", 'w+'), json_encode($revisions));
+    $newEdit = new stdClass;
+    $newEdit->pageID = $id;
+    $newEdit->title = $name;
+    $newEdit->summary = $editSummary;
+    $newEdit->author = $_SESSION['userid'];
+    $newEdit->size = strlen($contents);
+    $newEdit->revid = $revisionID;
+    $newEdit->time = time();
+    $newEdits = json_decode(file_get_contents(__DIR__ . "/mod/recentChanges.json"));
+    array_unshift($newEdits, $newEdit);
+    fwrite(fopen(__DIR__ . "/mod/recentChanges.json", 'w+'), json_encode($newEdits));
     return true;
 }
