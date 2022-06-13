@@ -14,8 +14,8 @@ require __DIR__ . "/getrecentedits.php";
 <script>
     document.getElementById('no-js').hidden = 'hidden';
     document.getElementById('yes-js').hidden = '';
-    document.getElementById('recentChangesArea').style.opacity = '0.5';
     function refreshChanges() {
+        document.getElementById('recentChangesArea').style.opacity = '0.5';
         document.querySelector('#refresh').disabled = 'disabled';
         fetch('index.php?title=Special:getrecentedits&raw=true')
         .then(function(response) {
