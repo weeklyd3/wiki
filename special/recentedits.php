@@ -14,6 +14,7 @@ require __DIR__ . "/getrecentedits.php";
 <script>
     document.getElementById('no-js').hidden = 'hidden';
     document.getElementById('yes-js').hidden = '';
+    document.getElementById('recentChangesArea').style.opacity = '0.5';
     function refreshChanges() {
         document.querySelector('#refresh').disabled = 'disabled';
         fetch('index.php?title=Special:getrecentedits&raw=true')
@@ -21,6 +22,7 @@ require __DIR__ . "/getrecentedits.php";
             return response.text();
         })
         .then(function(text) {
+            document.getElementById('recentChangesArea').style.opacity = '1';
             document.querySelector('#refresh').disabled = '';
             document.getElementById('recentChangesArea').innerHTML = text;
         });
