@@ -30,10 +30,13 @@ function images(string $text) {
         $iMageFrame->setAttribute('class', 'image');
 
         $iMageLink = $html->createElement('a');
+        $iMageLink->setAttribute('class', 'file-link');
+        $iMageLink->textContent = "(File information)";
         $iMageLink->setAttribute('href', 'index.php?title=File:' . urlencode($src));
         $type = mime_content_type(__DIR__ . "/../../files/live/$src");
         $iMageItself = $html->createElement('div');
         $iMageItself->textContent = "File $src";
+        $iMageItself->setAttribute('class', 'media-file');
         $srcu = urlencode($src);
         if (explode("/", $type)[0] === 'image') {
             $iMageItself = $html->createElement('img');
@@ -50,7 +53,8 @@ function images(string $text) {
             $iMageItself->setAttribute('controls', 'controls');
             $iMageItself->setAttribute('src', "index.php?title=Special:rawfile&filename=$srcu");
         }
-        $iMageLink->appendChild($iMageItself);
+        $iMageFrame->appendChild($iMageItself);
+        $iMageFrame->appendChild($iMageLink);
         $iMageFrame->appendChild($iMageLink);
         $iMageCraption = $html->createElement('figcaption');
         require_once __DIR__ . "/parsedown.php";
