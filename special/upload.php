@@ -1,5 +1,10 @@
 <?php 
 $title = 'Upload file';
+if (!isset($_SESSION['username'])) {
+    $title = 'Please log in';
+    ?><div class="error">Please log in to upload files.</div><?php
+    return;
+}
 require_once __DIR__ . "/../pages.php";
 if (file_exists(__DIR__ . "/../licenses.json")) $licenses = json_decode(file_get_contents(__DIR__ . "/../licenses.json"));
 else $licenses = array(
