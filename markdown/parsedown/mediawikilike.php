@@ -89,3 +89,42 @@ function redirects($text) {
     }
     return implode("\n", $t);
 }
+/* 
+    Embeds YouTube videos. Examples:
+
+        <youtube>dQw4w9WgXcQ</youtube>                          - normal click-to-play
+        <youtube width="100" height="100">dQw4w9WgXcQ</youtube> - again normal click to play
+        <youtube mute>dQw4w9WgXcQ</youtube>                     - Mute video
+        <youtube autoplay>dQw4w9WgXcQ</youtube>                 - Autoplay + mute
+        <youtube loop>dQw4w9WgXcQ</youtube>                     - loop video
+*/
+function youtube(string $text): string {
+    libxml_use_internal_errors(true);
+    $html = new DOMDocument;
+    $html->loadHTML("<!DOCTYPE html><html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><meta charset=\"utf-8\" /></head><body>$text</body></html>");
+    $videos = $html->getElementsByTagName('youtube');
+    $videos = iterator_to_array($videos);
+    foreach ($videos as $video) {
+        $iframe = $html->createElement('iframe');
+        $id = $video->textContent;
+        $iframe->setAttribute('src', "https://www.youtube-nocookie.com/embed/$id?unusedParameter=1");
+        if ($video->hasAttribute('width')) $iframe->setAttribute('width', $video->getAttribute('width'));
+        if ($video->hasAttribute('height')) $iframe->setAttribute('height', $video->getAttribute('height'));
+
+        $mute = $video->hasAttribute('mute') || $video->hasAttribute('autoplay');
+        $autoplay = $video->hasAttribute('autoplay');
+        $loop = $video->hasAttribute('loop');
+
+        if ($mute) appendAttribute($iframe, 'src', '&mute=1');
+        if ($autoplay) appendAttribute($iframe, 'src', '&autoplay=1');
+        if ($loop) appendAttribute($iframe, 'src', '&loop=1&playlist=' . $id);
+        $iframe->setAttribute('frameborder', '0');
+        $iframe->setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+        $iframe->setAttribute('allowfullscreen', 'allowfullscreen');
+        $video->parentNode->replaceChild($iframe, $video);
+    }
+    return substr($html->saveHTML($html->getElementsByTagName('body')[0]), 6, -7);
+}
+function appendAttribute($element, $attr, $extra) {
+    $element->setAttribute($attr, $element->getAttribute($attr) . $extra);
+}

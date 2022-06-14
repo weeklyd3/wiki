@@ -26,7 +26,7 @@ class Parsedown
     {
         require_once __DIR__ . '/mediawikilike.php';
         $text = redirects($text);
-        
+
         $Elements = $this->textElements($text);
 
         # convert to markup
@@ -38,7 +38,13 @@ class Parsedown
         require_once __DIR__ . '/../htmlpurifier/library/HTMLPurifier.auto.php';
 
         $config = HTMLPurifier_Config::createDefault();
+        $config->set('HTML.SafeIframe', true);
+        $config->set('URI.SafeIframeRegexp', '%^(https?:)?//(www\.youtube(?:-nocookie)?\.com/embed/)%');
         $purifier = new HTMLPurifier($config);
+
+        libxml_use_internal_errors(true);
+        $markup = youtube($markup);
+
         $clean_html = $purifier->purify($markup);
 
         $clean_html = parseMediawiki($clean_html);
