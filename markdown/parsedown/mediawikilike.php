@@ -11,8 +11,8 @@ function setInnerHTML($element, $html) {
     $element->appendChild($fragment);
 }
 function images(string $text) {
-    $html = new DOMDocument;
-    $html->loadHTML("<html><body>" . $text . "</body></html>");
+    $html = new DOMDocument('1.0', 'UTF-8');
+    $html->loadHTML("<!DOCTYPE html><html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><meta charset=\"utf-8\" /></head><body>" . $text . "</body></html>");
     $html->loadHTML($html->saveHTML());
     $iMages = $html->getElementsByTagName('img');
     // Those are hopefully in your head since 1982.
