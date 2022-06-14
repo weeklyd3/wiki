@@ -19,6 +19,7 @@ function upload($licenses) {
     $destname = cleanFilename($_POST['destname']);
     if (substr($destname, -4) === '.php') {
         ?><div class="error">Due to people uploading PHP files and then linking to them to execute them, you cannot upload PHP files. Sorry. Try giving it another extension like txt.</div><?php
+        return;
     }
     if (!is_dir(__DIR__ . "/../files/live")) mkdir(__DIR__ . "/../files/live", 0777, true);
     if (file_exists(__DIR__ . "/../files/live/$destname")) {
