@@ -242,7 +242,7 @@ tr th {
     text-align: center;
     padding: 3px;
 }
-.image a, .image a img {
+.image a, .image a img, figure.image img, figure.image audio, figure.image video {
     max-width: 100%;
     box-sizing: border-box;
 }
