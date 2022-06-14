@@ -253,3 +253,6 @@ tr th {
 figure.image figcaption {
     padding: 0;
 }
+input, select, textarea {
+    font-size: inherit;
+}
