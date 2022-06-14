@@ -108,6 +108,9 @@ $output = ob_get_clean();
         <meta name="viewport" content="width=device-width,initial-scale=1.0" />
         <title><?php echo htmlspecialchars($title); ?></title>
         <link rel="stylesheet" href="style.css" />
+        <script src="highlight-js/highlight.min.js"></script>
+        <link rel="stylesheet" href="highlight-js/vs.min.css" />
+        <script src="load.js"></script>
     </head>
     <body id="baudy">
         <?php require 'header.php'; ?>

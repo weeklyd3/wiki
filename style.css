@@ -256,3 +256,6 @@ figure.image figcaption {
 input, select, textarea {
     font-size: inherit;
 }
+pre, code {
+    font-size: inherit;
+}

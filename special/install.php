@@ -83,7 +83,8 @@ if (isset($_POST['install'])) {
     ?>DONE</li>
     <li>Logging in to administrator account... <?php login($_POST['username'], $_POST['password']); ?>DONE</li>
 <li>Writing settings file... <?php fwrite(fopen(__DIR__ . "/../options.php", "w+"), $settingsFileText); ?>DONE</li>
-<li>Creating main page... <?php modifyPage("Main Page", file_get_contents(__DIR__ . '/../defaultMainPage.txt'), 'Create main page (initiated during installation)'); ?></li>
+<li>Creating main page... <?php modifyPage("Main Page", file_get_contents(__DIR__ . '/../defaultMainPage.txt'), 'Create main page (initiated during installation)');
+?>DONE</li>
 </ul>
 <p>The installation has completed. You can now <a href="index.php">browse your wiki</a>.</p>
 <?php
