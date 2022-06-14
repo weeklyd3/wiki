@@ -5,7 +5,7 @@
 #baudy [onclick]:not([disabled]) {
 	cursor: pointer;
 }
-#baudy button, #baudy input[type=button], #baudy input[type=submit], #baudy select, #baudy textarea {
+#baudy button:not(.nobuttonformat), #baudy input[type=button], #baudy input[type=submit], #baudy select, #baudy textarea {
     vertical-align: middle;
 	font-size: inherit;
 	padding: 7px;

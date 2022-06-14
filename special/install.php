@@ -66,7 +66,7 @@ if (isset($_POST['install'])) {
     foreach ($_POST as $name => $value) {
         if ($name === 'footer') {
             ?><li>Writing footer code... <?php
-            fwrite(fopen('footer.html', 'w+'), $_POST['footer']);
+            fwrite(fopen(__DIR__ . '/../footer.html', 'w+'), $_POST['footer']);
             ?>DONE</li><?php
             continue;
         }

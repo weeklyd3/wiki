@@ -135,6 +135,7 @@ $output = ob_get_clean();
         } ?>
     </head>
     <body id="baudy">
+        <script>const pageTitle = <?php echo json_encode($originalPageName); ?>;</script>
         <?php require 'header.php'; ?>
         <h1 id="taitl"><?php echo htmlspecialchars($title); ?></h1>
         <small id="subheading"><?php echo htmlspecialchars($subheading); ?></small>
