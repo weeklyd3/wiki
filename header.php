@@ -28,12 +28,12 @@ define('pagename', $originalPageName);
         <form action="index.php" class="inline">
             <input type="hidden" name="title" value="<?php echo htmlspecialchars(pagename); ?>" />
             <input type="hidden" name="action" value="edit" />
-            <input type="submit" value="Edit" <?php if (substr(pagename, 0, 8) === "Special:") { ?>disabled="disabled" <?php } ?>/>
+            <input type="submit" value="Edit" title="<?php if (substr(pagename, 0, 8) === "Special:") { ?>You cannot edit special pages." disabled="disabled" <?php } else { ?>Edit this page" <?php } ?>/>
         </form>
         <form action="index.php" class="inline">
             <input type="hidden" name="title" value="<?php echo htmlspecialchars(pagename); ?>" />
             <input type="hidden" name="action" value="history" />
-            <input type="submit" value="Revisions" <?php if (substr(pagename, 0, 8) === "Special:") { ?>disabled="disabled" <?php } ?>/>
+            <input type="submit" value="Revisions" title="<?php if (substr(pagename, 0, 8) === "Special:") { ?>No history is available for special pages." disabled="disabled" <?php } else { ?>View past revisions of this page" <?php } ?>/>
         </form>
         <div class="floatright">
             <form action="index.php" method="GET">
@@ -43,4 +43,5 @@ define('pagename', $originalPageName);
             </form>
         </div>
     </div>
+    <div><a href="index.php?title=Special:recentedits">Recent activity</a> - <a href="index.php?title=Special:upload">Upload file</a></div>
 </header>

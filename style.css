@@ -225,3 +225,24 @@ body#baudy {
     text-decoration: none;
     margin: 3px;
 }
+table td, table th {
+    padding: 7px;
+    border: 1px solid;
+    border-collapse: collapse;
+}
+tr th {
+    background-color: #d4d4d4;
+}
+.image {
+    max-width: 100%;
+    box-sizing: border-box;
+    background-color: #d4d4d4;
+    display: inline-block;
+    margin: 0; 
+    text-align: center;
+    padding: 3px;
+}
+.image a, .image a img {
+    max-width: 100%;
+    box-sizing: border-box;
+}

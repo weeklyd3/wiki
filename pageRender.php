@@ -15,6 +15,21 @@ function renderPage(string $namespace, string $title) {
             $pageNamespace = $namespace;
             require "special/$specialPageFileName.php";
             break;
+        case "File":
+            // Note the intentional absence of the break statement. This is required to
+            // render the description page below the file.
+            $filename = cleanFilename(substr($title, 5));
+            if (!file_exists(__DIR__ . "/files/live/$filename")) {
+                ?><div class="error">There seems to be no file with that name. If you would like to <a href="index.php?title=Special:upload">upload it</a>, go ahead.</div><?php
+            } else {
+                ?><div id="filedesc">
+                    A local file exists.
+                    <div id="stats"><?php echo htmlspecialchars($filename); ?> (<?php echo filesize(__DIR__ . "/files/live/$filename"); ?> bytes), <a href="index.php?title=Special:rawfile&filename=<?php echo htmlspecialchars(urlencode($filename)); ?>">download</a></div>
+                    <div>Use this file on-wiki: <code>![alt/caption text](<?php echo htmlspecialchars($filename); ?>)</code></div>
+                    <div><em>(The local file description page follows.)</em></div>
+                </div>
+                <hr /><?php
+            }
         default:
             require __DIR__ . '/markdown/parsedown/parsedown.php';
             $Parsedown = new Parsedown;
