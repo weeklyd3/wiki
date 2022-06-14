@@ -246,3 +246,10 @@ tr th {
     max-width: 100%;
     box-sizing: border-box;
 }
+.file-link {
+    font-size: 90%;
+    display: block;
+}
+figure.image figcaption {
+    padding: 0;
+}
