@@ -24,7 +24,9 @@ class Parsedown
 
     function text($text)
     {
-        $currentuser = $_SESSION['username'];
+        require_once __DIR__ . '/mediawikilike.php';
+        $text = redirects($text);
+        
         $Elements = $this->textElements($text);
 
         # convert to markup
@@ -39,7 +41,6 @@ class Parsedown
         $purifier = new HTMLPurifier($config);
         $clean_html = $purifier->purify($markup);
 
-        require_once __DIR__ . '/mediawikilike.php';
         $clean_html = parseMediawiki($clean_html);
 
         return $clean_html;

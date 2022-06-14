@@ -77,3 +77,15 @@ function wikilinks(string $text) {
         return '<a href="index.php?title=' . htmlspecialchars(urlencode($pagename)) . '">' . $text . '</a>';
     }, $text);
 }
+function redirects($text) {
+    $t = explode("\n", $text);
+    foreach ($t as $num => &$line) {
+        if (!$num && preg_match('/#REDIRECT \[\[(.*?)\]\]/i', $line, $m)) {
+            $target = $m[1];
+            $htarget = htmlspecialchars($target);
+            $hutarget = htmlspecialchars(urlencode($target));
+            $line = "<div class=\"rdr\">This page redirects to: <div><a class=\"rdr-link\" href=\"index.php?title=$hutarget\">$htarget</a></div></div>";
+        }
+    }
+    return implode("\n", $t);
+}

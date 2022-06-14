@@ -259,3 +259,14 @@ input, select, textarea {
 pre, code {
     font-size: inherit;
 }
+.rdr-link {
+    font-size: 1.5em;
+}
+.rdr-link::before {
+    content: "»";
+}
+.rdr {
+    padding: 7px;
+    border-radius: 7px;
+    border: 1px solid;
+}

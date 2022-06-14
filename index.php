@@ -20,6 +20,25 @@ if (substr($originalPageName, 0, strlen('User talk:')) === 'User talk:' && isset
     $currentUserID = $_SESSION['userid'];
     if (file_exists(__DIR__ . "/users/data/$currentUserID/newMessages.json") && $userTalkPageName === $_SESSION['username']) unlink(__DIR__ . "/users/data/$currentUserID/newMessages.json");
 }
+$redirectFrom = false;
+// You are not expected to understand that.
+$redirectRegex = '/#REDIRECT \[\[(.*?)\]\]/i';
+$pageIndex = json_decode(file_get_contents("pages/page2ID.json"));
+if (isset($pageIndex->$originalPageName) && !isset($_GET['action'])) {
+    $id = $pageIndex->$originalPageName;
+    $text = file_get_contents("pages/data/$id/page.md");
+    $matched = preg_match($redirectRegex, explode("\n", $text)[0], $targetPage);
+    if ($matched === 1) {
+        if (!isset($_GET['noredirect'])) {
+            $o = $originalPageName;
+            $originalPageName = $targetPage[1];
+            $title = $originalPageName;
+            $utitle = urlencode($title);
+            error_log('Redirecting page to ' . $title);
+            $redirectFrom = $o;
+        }
+    }
+}
 if (isset($_GET['raw'])) {
     renderPage(explode(":", $title)[0], $title);
     exit(0);
@@ -111,11 +130,25 @@ $output = ob_get_clean();
         <script src="highlight-js/highlight.min.js"></script>
         <link rel="stylesheet" href="highlight-js/vs.min.css" />
         <script src="load.js"></script>
+        <?php if ($redirectFrom !== false) { 
+            ?><link rel="canonical" href="index.php?title=<?php echo htmlspecialchars(urlencode($originalPageName)); ?>" /><?php
+        } ?>
     </head>
     <body id="baudy">
         <?php require 'header.php'; ?>
         <h1 id="taitl"><?php echo htmlspecialchars($title); ?></h1>
         <small id="subheading"><?php echo htmlspecialchars($subheading); ?></small>
+        <?php 
+        if ($redirectFrom !== false) {
+            ?><div><small id="rdrfrom">Redirected from <a href="index.php?title=<?php echo htmlspecialchars(urlencode($redirectFrom)); ?>&noredirect"><?php echo htmlspecialchars($redirectFrom); ?></a></small>
+        <script>
+        const actualPageName = <?php echo json_encode($originalPageName); ?>;
+        const url = new URL(location.href);
+        url.searchParams.set('title', actualPageName);
+        window.history.replaceState({}, document.title, url);</script>
+        </div><?php
+        }
+        ?>
         <div id="page-content"><?php echo $output; ?></div>
         <footer><?php require 'footer.html'; ?></footer>
     </body>
