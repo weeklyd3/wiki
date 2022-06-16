@@ -1,4 +1,5 @@
 <?php
+global $previouslyDeleted;
 function cleanFilename($stuff) {
 	$illegal = array(" ","?","/","\\","*","|","<",">",'"');
 	$legal = array("-","_","_","_","_","_","_","_","_");
@@ -7,6 +8,7 @@ function cleanFilename($stuff) {
 }
 function renderPage(string $namespace, string $title) {
     global $title;
+    global $previouslyDeleted;
     switch ($namespace) {
         case 'Special':
             $specialPageFileName = cleanFilename(substr($title, 8));
@@ -35,7 +37,8 @@ function renderPage(string $namespace, string $title) {
             $Parsedown = new Parsedown;
             $pageIndex = json_decode(file_get_contents("pages/page2ID.json"));
             if (!isset($pageIndex->$title)) {
-                echo $Parsedown->text(str_replace(array('$1', '$2'), array($title, urlencode($title)), file_get_contents('nosuchpage.txt')));
+                if ($previouslyDeleted) displayDeleteLog("This page does not exist, but was previously deleted:");
+                echo $Parsedown->text(str_replace(array('$1', '$2'), array(htmlspecialchars($title), htmlspecialchars(urlencode($title))), file_get_contents('nosuchpage.txt')));
             } else {
                 $id = $pageIndex->$title;
                 echo $Parsedown->text(file_get_contents("pages/data/$id/page.md"));

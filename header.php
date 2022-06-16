@@ -35,6 +35,32 @@ define('pagename', $originalPageName);
             <input type="hidden" name="action" value="history" />
             <input type="submit" value="Revisions" title="<?php if (substr(pagename, 0, 8) === "Special:") { ?>No history is available for special pages." disabled="disabled" <?php } else { ?>View past revisions of this page" <?php } ?>/>
         </form>
+        <?php 
+        global $adminUserGroup;
+        global $originalPageName;
+        $gr = getUserGroups($_SESSION['userid'], true);
+        if (in_array($adminUserGroup, $gr) && isset($pageIndex->$originalPageName)) {
+        ?>
+        <form action="index.php" class="inline">
+            <input type="hidden" name="page" value="<?php echo htmlspecialchars(pagename); ?>" />
+            <input type="hidden" name="title" value="Special:delete" />
+            <input type="submit" value="Delete" title="<?php if (substr(pagename, 0, 8) === "Special:") { ?>You cannot delete special pages." disabled="disabled" <?php } else { ?>Delete this page, making it inaccessible to the public" <?php } ?>/>
+        </form>
+        <?php
+        }
+        $deletedPageIndex = json_decode(file_get_contents(__DIR__ . "/deleted-pages/page2IDs.json"));
+        if (!isset($deletedPageIndex->$originalPageName)) $deleted = false;
+        else $deleted = true;
+        if ($deleted && in_array($adminUserGroup, $gr) && !isset($pageIndex->$originalPageName)) {
+            ?>
+            <form action="index.php" class="inline">
+                <input type="hidden" name="page" value="<?php echo htmlspecialchars(pagename); ?>" />
+                <input type="hidden" name="title" value="Special:undelete" />
+                <input type="submit" value="Restore" title="<?php if (substr(pagename, 0, 8) === "Special:") { ?>You cannot undelete special pages." disabled="disabled" <?php } else { ?>Undelete this page, making it accessible to the public" <?php } ?>/>
+            </form>
+            <?php
+            }
+        ?>
         <div class="floatright">
             <form action="index.php" method="GET">
                 <input type="hidden" name="title" value="Special:search" />

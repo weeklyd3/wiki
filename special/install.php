@@ -39,6 +39,16 @@ $options = array(
         "type" => "label",
         "default" => "Admin stuff"
     ),
+    "adminUserGroup" => array(
+        "type" => "text",
+        "description" => "The name of the 'administrators' group.",
+        "default" => "administrators"
+    ),
+    "newUserGroup" => array(
+        "type" => "text",
+        "description" => "The name of the 'new users' group.",
+        "default" => "new users"
+    ),
     "username" => array(
         "type" => "text",
         "description" => "Admin username"

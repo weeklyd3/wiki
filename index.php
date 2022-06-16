@@ -13,7 +13,9 @@ if (!defined('installed') && ($_GET['title'] ?? 'poo poo') !== 'Special:install'
 }
 $originalPageName = $title;
 $action = isset($_GET['action']) ? $_GET['action'] : "";
-
+$deletedPageIndex = json_decode(file_get_contents(__DIR__ . "/deleted-pages/page2IDs.json"));
+if (!isset($deletedPageIndex->$originalPageName)) $previouslyDeleted = false;
+else $previouslyDeleted = true;
 require 'pageRender.php';
 if (substr($originalPageName, 0, strlen('User talk:')) === 'User talk:' && isset($_SESSION['username'])) { 
     $userTalkPageName = substr($originalPageName, strlen('User talk:'));
@@ -72,6 +74,7 @@ else {
             $pageIndex = json_decode(file_get_contents("pages/page2ID.json"));
             if (!isset($pageIndex->$originalPageName)) {
                 ?><p>Notice: This page does not exist yet. Saving your edits will create it.</p><?php
+                if ($previouslyDeleted) displayDeleteLog("Notice: This page has been previously deleted. Please make sure you aren't creating anything that's deletable under the following");
             }
             $id = $pageIndex->$originalPageName;
             $title = "$originalPageName - edit";

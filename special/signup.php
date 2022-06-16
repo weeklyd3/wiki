@@ -2,7 +2,7 @@
 $title = 'Create account';
 if (isset($_POST['signup'])) {
     if ($_POST['password'] === $_POST['password2']) {
-        if (createAccount($_POST['username'], $_POST['password'], array('new users'))) {
+        if (createAccount($_POST['username'], $_POST['password'], array($newUserGroup))) {
             $title = 'Welcome!';
             login($_POST['username'], $_POST['password']);
             ?><p>You have created an account successfully and logged in to it. Please hit the BACK button and start browsing the wiki!</p><?php

@@ -44,5 +44,60 @@ function modifyPage(string $name, string $contents, string $editSummary): bool {
     $newEdits = json_decode(file_get_contents(__DIR__ . "/mod/recentChanges.json"));
     array_unshift($newEdits, $newEdit);
     fwrite(fopen(__DIR__ . "/mod/recentChanges.json", 'w+'), json_encode($newEdits));
+    new logEntry($_SESSION['userid'], null, $name, "edit", "Edited page $name", "Edit summary: $editSummary");
     return true;
+}
+function deletePage(string $title, bool $deleteFileIfExists = true): ?bool {
+    if (!isset($_SESSION['userid'])) {
+        return null;
+    }
+    $ug = getUserGroups($_SESSION['userid'], true);
+    global $adminUserGroup;
+    if (!in_array($adminUserGroup, $ug)) return null;
+    $pageIndex = json_decode(file_get_contents((__DIR__ . "/pages/page2ID.json")));
+    if (!isset($pageIndex->$title)) return false;
+    $id = $pageIndex->$title;
+    rename(__DIR__ . "/pages/data/$id", __DIR__ . "/deleted-pages/data/$id");
+    unset($pageIndex->$title);
+    fwrite(fopen(__DIR__ . "/pages/page2ID.json", "w+"), json_encode($pageIndex));
+    $deletedPageIndex = json_decode(file_get_contents(__DIR__ . "/deleted-pages/page2IDs.json"));
+    if (!isset($deletedPageIndex->$title)) $deletedPageIndex->$title = array();
+    array_push($deletedPageIndex->$title, $id);
+    fwrite(fopen(__DIR__ . "/deleted-pages/page2IDs.json", "w+"), json_encode($deletedPageIndex));
+    if (substr($title, 0, 5) === 'File:' && $deleteFileIfExists) {
+        // Delete the file as well
+    }
+    return true;
+}
+function displayDeleteLog(string $before): void {
+    global $originalPageName;
+    ?>
+    <div class="error">
+        <?php echo $before; ?>
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Time</th>
+                <th>Type</th>
+                <th>Comment</th>
+                <th>Reason</th>
+            </tr>
+            <?php 
+            require_once __DIR__ . "/log/log.php";
+            $entries = queryLog(array('delete', 'undelete'), $originalPageName, false);
+            foreach ($entries as $entry) {
+                ?>
+                    <tr>
+                        <td><?php echo userlink(userinfo($entry->performer)->username); ?></td>
+                        <td><?php echo formatDate($entry->time); ?></td>
+                        <td><?php echo htmlspecialchars($entry->type); ?></td>
+                        <td><?php echo htmlspecialchars($entry->comment); ?></td>
+                        <td><?php echo htmlspecialchars($entry->reason); ?></td>
+                    </tr>
+                <?php
+            }
+            ?>
+        </table>
+    </div>
+    <?php
 }
