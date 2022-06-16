@@ -76,7 +76,8 @@ function login(string $username, string $password): int {
 function userlink(string $username): string {
     return '<a href="index.php?title=User:' . htmlspecialchars(urlencode($username)) . '">' . htmlspecialchars($username) . '</a> (<a href="index.php?title=User+talk:' . htmlspecialchars(urlencode($username)) . '">leave a message</a>)';
 }
-function getUserGroups(int $user, bool $plain = false): ?array {
+function getUserGroups(?int $user, bool $plain = false): ?array {
+    if (!isset($user)) return array();
     if (!userinfo($user)) return null;
 
     $groups = userinfo($user)->groups;
