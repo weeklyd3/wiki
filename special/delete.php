@@ -32,7 +32,8 @@ if (!isset($page2ID->$title)) {
 $title = "Delete $title";
 global $originalPageName;
 ?>
-<p>Are you sure you want to delete the page <strong><?php echo htmlspecialchars($_GET['page']); ?></strong>?</p>
+<p>Are you sure you want to delete the page <strong><?php echo htmlspecialchars($_GET['page']); ?></strong>? Pages can be restored later.</p>
+<p>If this is a file page, the corresponding file will also be permanently deleted.</p>
 <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="post">
 <label>Reason for deletion: <input type="text" name="reason" value="" required="required" /></label><div></div>
 <input type="submit" name="delete" value="Yes, I am sure" />

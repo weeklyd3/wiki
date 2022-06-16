@@ -66,6 +66,8 @@ function deletePage(string $title, bool $deleteFileIfExists = true): ?bool {
     fwrite(fopen(__DIR__ . "/deleted-pages/page2IDs.json", "w+"), json_encode($deletedPageIndex));
     if (substr($title, 0, 5) === 'File:' && $deleteFileIfExists) {
         // Delete the file as well
+        $filename = cleanFilename(substr($title, 5));
+        if (file_exists(__DIR__ . "/files/live/$filename")) unlink(__DIR__ . "/files/live/$filename");
     }
     return true;
 }
