@@ -103,3 +103,15 @@ function displayDeleteLog(string $before): void {
     </div>
     <?php
 }
+/**
+ * Checks if a page exists.
+ * 
+ * This function checks if a page exists and was not deleted. 
+ * 
+ * @return bool If the page exists.
+ * @param string The name of the page.
+ */
+function page_exists(string $title): bool {
+    $page2ID = json_decode(file_get_contents(__DIR__ . "/pages/page2ID.json"));
+    return isset($page2ID->$title);
+}

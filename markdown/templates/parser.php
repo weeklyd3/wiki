@@ -18,7 +18,6 @@ function parseTemplates(string $text) {
         $nextTwo = $char . ($notlast ? $chars[$index + 1] : "");
         if ($nextTwo === '{{') {
             if ($depth === 0) $start = $index;
-            // Template starts
             if ($depth) $currentmatch .= '{{';
             $depth++;
             $skipNext = true;
@@ -50,6 +49,36 @@ function parseTemplates(string $text) {
 // was not found or the text of the template.
 //
 // For purposes of testing, you may use a callback that returns random data.
-function parse(string $text, callable $getTemplate) {
+/**
+ * Parses a string. It only handles templates, anything else should use Parsedown.
+ * 
+ * @return string $parsedText The parsed template text.
+ * @param string $text The text to parse.
+ * @param callback $getTemplate The function that gets the value of the template. Returns null if none could be found.
+ * @param bool $doNest If nesting should be handled.
+ */
+function parse(string $text, callable $getTemplate, bool $doNest = true) {
     $parsed = parseTemplates($text);
+    $parsedText = $text;
+    foreach ($parsed as $index => &$parse) {
+        $templateFull = explode('|', $parse->text);
+        $invocation = $parse->text;
+        $template = call_user_func(__FUNCTION__, $templateFull[0], $getTemplate);
+        $templateText = call_user_func($getTemplate, "Template:$template");
+        if (!isset($templateText)) $templateText = "Error: Template not found: Template:$template";
+        $parsedText = substr_replace($parsedText, $templateText, $parse->start, 2 + ($parse->end - $parse->start));
+        array_shift($parsed);
+        foreach ($parsed as &$thing) {
+            $thing->start += strlen($templateText) - strlen($invocation);
+            $thing->end += strlen($templateText) - strlen($invocation);
+        }
+    }
+    if ($doNest) {
+        $count = count(parseTemplates($parsedText));
+        while ($count) {
+            $parsedText = parse($parsedText, $getTemplate, false);
+            $count = count(parseTemplates($parsedText));
+        }
+    }
+    return $parsedText;
 }

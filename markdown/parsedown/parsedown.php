@@ -25,6 +25,7 @@ class Parsedown
     function text($text)
     {
         require_once __DIR__ . '/mediawikilike.php';
+        $text = templates($text);
         $text = redirects($text);
 
         $Elements = $this->textElements($text);

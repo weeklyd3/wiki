@@ -128,3 +128,14 @@ function youtube(string $text): string {
 function appendAttribute($element, $attr, $extra) {
     $element->setAttribute($attr, $element->getAttribute($attr) . $extra);
 }
+function templates(string $text): string {
+    require_once __DIR__ . "/../templates/parser.php";
+    require_once __DIR__ . "/../../pages.php";
+    $page2ID = json_decode(file_get_contents(__DIR__ . "/../../pages/page2ID.json"));
+    return parse($text, function($title) use ($page2ID) {
+        if (!page_exists($title)) return null;
+
+        $id = $page2ID->$title;
+        return file_get_contents(__DIR__ . "/../../pages/data/$id/page.md");
+    });
+}
