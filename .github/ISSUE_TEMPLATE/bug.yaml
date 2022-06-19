@@ -26,11 +26,10 @@ body:
         - Chrome
         - Safari
         - Microsoft Edge
-  - type: dropdown
+  - type: input
     id: php
     attributes:
       label: What version of PHP are you running?
-      type: input
   - type: textarea
     id: logs
     attributes:
