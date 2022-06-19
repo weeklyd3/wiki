@@ -26,6 +26,8 @@ body:
         - Chrome
         - Safari
         - Microsoft Edge
+        - Internet Explorer
+        - Other (in body)
   - type: input
     id: php
     attributes:
