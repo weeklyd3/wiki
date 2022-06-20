@@ -69,11 +69,12 @@ function parse(string $text, callable $getTemplate, bool $doNest = true) {
         $template = call_user_func(__FUNCTION__, $name, $getTemplate);
         $templateText = call_user_func($getTemplate, "Template:$template", ...$args);
         if (!isset($templateText)) $templateText = "Error: Template not found: Template:$template";
+        $orig = $parsedText;
         $parsedText = substr_replace($parsedText, $templateText, $parse->start, 2 + ($parse->end - $parse->start));
         array_shift($parsed);
         foreach ($parsed as &$thing) {
-            $thing->start += strlen($templateText) - strlen($invocation);
-            $thing->end += strlen($templateText) - strlen($invocation);
+            $thing->start += strlen($parsedText) - strlen($orig);
+            $thing->end += strlen($parsedText) - strlen($orig);
         }
     }
     if ($doNest) {

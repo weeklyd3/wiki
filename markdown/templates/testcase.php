@@ -60,3 +60,9 @@ echo parse($wikitext, function($title) {
 });
 echo "\n";
 ?>
+TEST 6 - Nested templates
+<?php 
+$wikitext = "{{template{{bar}}{{baz}}|foo{{baz}}}}";
+echo parse($wikitext, function($title) {
+    return "{Template $title}";
+});
