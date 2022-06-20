@@ -184,12 +184,13 @@ function templates(string $text): string {
 
                     if (isset($parsedArgs[$argName])) $toReplace = $parsedArgs[$argName];
                     else $toReplace = $fallback;
+                    $orig = $text;
 
                     $text = substr_replace($text, $toReplace, $start, $length);
                     array_shift($contents);
                     foreach ($contents as $content) {
-                        $content->start += $length;
-                        $content->end += $length;
+                        $content->start += strlen($text) - strlen($orig);
+                        $content->end += strlen($text) - strlen($orig);
                     }
                 }
                 libxml_use_internal_errors(true);
