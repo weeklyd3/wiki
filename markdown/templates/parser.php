@@ -62,9 +62,12 @@ function parse(string $text, callable $getTemplate, bool $doNest = true) {
     $parsedText = $text;
     foreach ($parsed as $index => &$parse) {
         $templateFull = explode('|', $parse->text);
+        $name = $templateFull[0];
+        array_shift($templateFull);
+        $args = $templateFull;
         $invocation = $parse->text;
-        $template = call_user_func(__FUNCTION__, $templateFull[0], $getTemplate);
-        $templateText = call_user_func($getTemplate, "Template:$template");
+        $template = call_user_func(__FUNCTION__, $name, $getTemplate);
+        $templateText = call_user_func($getTemplate, "Template:$template", ...$args);
         if (!isset($templateText)) $templateText = "Error: Template not found: Template:$template";
         $parsedText = substr_replace($parsedText, $templateText, $parse->start, 2 + ($parse->end - $parse->start));
         array_shift($parsed);

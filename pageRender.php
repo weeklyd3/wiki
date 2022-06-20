@@ -1,5 +1,6 @@
 <?php
 global $previouslyDeleted;
+global $originalPageName;
 function cleanFilename($stuff) {
 	$illegal = array(" ","?","/","\\","*","|","<",">",'"');
 	$legal = array("-","_","_","_","_","_","_","_","_");
@@ -9,6 +10,7 @@ function cleanFilename($stuff) {
 function renderPage(string $namespace, string $title) {
     global $title;
     global $previouslyDeleted;
+    global $originalPageName;
     switch ($namespace) {
         case 'Special':
             $specialPageFileName = cleanFilename(substr($title, 8));
@@ -33,6 +35,7 @@ function renderPage(string $namespace, string $title) {
                 <hr /><?php
             }
         default:
+            global $originalPageName;
             require __DIR__ . '/markdown/parsedown/parsedown.php';
             $Parsedown = new Parsedown;
             $pageIndex = json_decode(file_get_contents("pages/page2ID.json"));

@@ -1,4 +1,17 @@
 <?php 
+global $originalPageName;
+function startsWith($haystack, $needle) {
+    $length = strlen($needle);
+    return substr($haystack, 0, $length) === $needle;
+}
+function endsWith( $haystack, $needle ) {
+   $length = strlen($needle);
+   if (!$length) {
+       return true;
+   }
+   return substr( $haystack, -$length ) === $needle;
+}
+
 function parseMediawiki(string $text) {
     $text = wikilinks($text);
     $text = images($text);
@@ -129,13 +142,66 @@ function appendAttribute($element, $attr, $extra) {
     $element->setAttribute($attr, $element->getAttribute($attr) . $extra);
 }
 function templates(string $text): string {
+    global $originalPageName;
     require_once __DIR__ . "/../templates/parser.php";
     require_once __DIR__ . "/../../pages.php";
     $page2ID = json_decode(file_get_contents(__DIR__ . "/../../pages/page2ID.json"));
-    return parse($text, function($title) use ($page2ID) {
-        if (!page_exists($title)) return null;
+    return parse($text, function($title, ...$args) use ($page2ID, $originalPageName) {
+        $parsedArgs = array();
+        $ctr = 1;
+        foreach ($args as $a) {
+            $name = explode('=', $a)[0];
+            $parsed = explode('=', $a);
+            if (count(explode('=', $a)) === 1) $name = $ctr++;
+            array_shift($parsed);
+            if (!count($parsed)) $parsed = explode('=', $a);
+            $parsedArgs[$name] = implode('=', $parsed);
+        }
+        switch ($title) {
+            case 'Template:FULLPAGENAME':
+                return $originalPageName;
+                break;
+            case 'Template:BASEPAGENAME':
+                error_log($originalPageName);
+                $pagename = explode(':', $originalPageName);
+                if (count($pagename) > 1) array_shift($pagename);
+                return implode(':', $pagename);
+                break;
+            default:
+                if (!page_exists($title)) return null;
+                $id = $page2ID->$title;
+                $contents = parseTemplates(file_get_contents(__DIR__ . "/../../pages/data/$id/page.md"));
+                $text = file_get_contents(__DIR__ . "/../../pages/data/$id/page.md");
+                foreach ($contents as $tag) {
+                    if (!startsWith($tag->text, 'arg')) continue;
+                    $argText = substr($tag->text, 3);
+                    $start = $tag->start;
+                    $length = 2 + $tag->end - $tag->start;
+                    $argName = explode('|', $argText)[0];
+                    $fallbackParts = explode('|', $argText);
+                    array_shift($fallbackParts);
+                    $fallback = implode('|', $fallbackParts);
 
-        $id = $page2ID->$title;
-        return file_get_contents(__DIR__ . "/../../pages/data/$id/page.md");
+                    if (isset($parsedArgs[$argName])) $toReplace = $parsedArgs[$argName];
+                    else $toReplace = $fallback;
+
+                    $text = substr_replace($text, $toReplace, $start, $length);
+                    array_shift($contents);
+                    foreach ($contents as $content) {
+                        $content->start += $length;
+                        $content->end += $length;
+                    }
+                }
+                libxml_use_internal_errors(true);
+                $doc = new DOMDocument;
+                $doc->loadHTML("<!DOCTYPE html><html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><meta charset=\"utf-8\" /></head><body>$text</body></html>");
+                $noincludes = $doc->getElementsByTagName('noinclude');
+                foreach ($noincludes as $no) {
+                    $no->parentNode->removeChild($no);
+                }
+                $text = substr($doc->saveHTML($doc->getElementsByTagName('body')->item(0)), 6, -7);
+                return $text;
+                break;
+        }
     });
 }

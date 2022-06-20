@@ -26,3 +26,37 @@ echo parse($wikitext, function($title) {
 });
 ?>
 
+TEST 4 - Actual arguments
+=========================
+<?php 
+$wikitext = '{{template|text}}';
+echo parse($wikitext, function($title, ...$args) {
+    return "Template. Argument 1: {$args[0]}";
+});
+?>
+
+TEST 5 - MALFORMED TEMPLATE SYNTAX
+==================================
+TEST 5.1 - Not 2 braces
+========================
+<?php 
+$wikitext = '{notatemplate}';
+echo parse($wikitext, function($title) {
+    return "Template $title";
+});
+echo "\n";
+$wikitext = '{{{thismaybeatemplate}}}';
+echo parse($wikitext, function($title) {
+    return "Template $title";
+});
+?> 
+
+TEST 5.2 - Opening and closing braces don't match 
+=================================================
+<?php 
+$wikitext = '{{{3open2close}}';
+echo parse($wikitext, function($title) {
+    return "Template $title";
+});
+echo "\n";
+?>
