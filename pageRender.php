@@ -1,6 +1,7 @@
 <?php
 global $previouslyDeleted;
 global $originalPageName;
+global $useTemplates;
 function cleanFilename($stuff) {
 	$illegal = array(" ","?","/","\\","*","|","<",">",'"');
 	$legal = array("-","_","_","_","_","_","_","_","_");

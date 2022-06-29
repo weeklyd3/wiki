@@ -1,5 +1,6 @@
 <?php
 global $originalPageName;
+global $useTemplates;
 #
 #
 # Parsedown
@@ -25,8 +26,9 @@ class Parsedown
     function text($text)
     {
         global $originalPageName;
+        global $useTemplates;
         require_once __DIR__ . '/mediawikilike.php';
-        $text = templates($text);
+        if ($useTemplates) $text = templates($text);
         $text = redirects($text);
 
         $Elements = $this->textElements($text);

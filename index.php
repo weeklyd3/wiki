@@ -5,6 +5,7 @@ require 'settings.php';
 require 'accounts.php';
 require 'pages.php';
 require 'date.php';
+global $useTemplates;
 if (!isset($_GET['title'])) header("Location: index.php?title=Main Page");
 $title = $_GET['title'] ?? 'Main Page';
 if (!defined('installed') && ($_GET['title'] ?? 'poo poo') !== 'Special:install') {
