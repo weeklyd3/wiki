@@ -146,7 +146,7 @@ $output = ob_get_clean();
         $config->userGroupsSimple = isset($_SESSION['userid']) ? getUserGroups($_SESSION['userid'], true) : array();
         $config->originalPageName = $originalPageName;
         echo json_encode($config, 128);
-        ?>;</script>
+        ?>; window.config = config;</script>
         <?php if ($redirectFrom !== false) { 
             ?><link rel="canonical" href="index.php?title=<?php echo htmlspecialchars(urlencode($originalPageName)); ?>" /><?php
         } ?>
