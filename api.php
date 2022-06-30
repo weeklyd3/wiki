@@ -80,3 +80,4 @@ if (isset($_GET['json'])) {
 <p>Below is the result of your API call. If you were expecting neat JSON output, add a <code>json</code> parameter to your URL instead of attempting to scrape this page.</p>
 <pre><code><?php echo htmlspecialchars($output); ?></code></pre>
 </body>
+</html>
