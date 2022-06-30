@@ -35,7 +35,7 @@ function createAccount(string $username, string $password, array $groups = array
             continue;
         }
         new logEntry($currentUID, $currentUID, null, "userGroupCreated", "Name: $group", "Group created while creating account");
-        $currentGroupID = json_decode(file_get_contents("users/currentGroupID.json"));
+        $currentGroupID = json_decode(file_get_contents(__DIR__ . "/users/currentGroupID.json"));
         $group2id->$group = $currentGroupID;
         fwrite(fopen(__DIR__ . "/users/group2ID.json", "w+"), json_encode($group2id));
         fwrite(fopen(__DIR__ . "/users/currentGroupID.json", "w+"), $currentGroupID + 1);

@@ -136,6 +136,7 @@ $output = ob_get_clean();
         <script src="highlight-js/highlight.min.js"></script>
         <link rel="stylesheet" href="highlight-js/vs.min.css" />
         <script src="load.js"></script>
+        <script src="extraload.js"></script>
         <?php if ($redirectFrom !== false) { 
             ?><link rel="canonical" href="index.php?title=<?php echo htmlspecialchars(urlencode($originalPageName)); ?>" /><?php
         } ?>
