@@ -1,4 +1,9 @@
-<?php 
+<?php
+ini_set('session.cookie_samesite', 'None');
+ini_set('session.cookie_secure', 'true');
+header('Access-Control-Allow-Origin', $_GET['origin'] ?? $_SERVER['HTTP_ORIGIN']);
+header('Access-Control-Allow-Credentials', 'true');
+session_start(); 
 class apiResponse {
     public $errors = null;
     public $query = null;

@@ -1,4 +1,6 @@
 <?php
+ini_set('session.cookie_samesite', 'None');
+ini_set('session.cookie_secure', 'true');
 ob_start();
 session_start();
 require 'settings.php';
