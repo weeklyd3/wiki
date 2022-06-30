@@ -4,3 +4,4 @@ users/
 deleted-pages/data
 deleted-pages/page2IDs.json
 extraload.js
+markdown/htmlpurifier/library/HTMLPurifier/DefinitionCache/
