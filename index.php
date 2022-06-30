@@ -135,8 +135,6 @@ $output = ob_get_clean();
         <link rel="stylesheet" href="style.css" />
         <script src="highlight-js/highlight.min.js"></script>
         <link rel="stylesheet" href="highlight-js/vs.min.css" />
-        <script src="load.js"></script>
-        <script src="extraload.js"></script>
         <script>const config = <?php 
         $config = new stdClass;
         $config->loggedIn = isset($_SESSION['username']);
@@ -147,6 +145,8 @@ $output = ob_get_clean();
         $config->originalPageName = $originalPageName;
         echo json_encode($config, 128);
         ?>; window.config = config;</script>
+        <script src="load.js"></script>
+        <script src="extraload.js"></script>
         <?php if ($redirectFrom !== false) { 
             ?><link rel="canonical" href="index.php?title=<?php echo htmlspecialchars(urlencode($originalPageName)); ?>" /><?php
         } ?>
