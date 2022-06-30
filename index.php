@@ -137,6 +137,16 @@ $output = ob_get_clean();
         <link rel="stylesheet" href="highlight-js/vs.min.css" />
         <script src="load.js"></script>
         <script src="extraload.js"></script>
+        <script>const config = <?php 
+        $config = new stdClass;
+        $config->loggedIn = isset($_SESSION['username']);
+        $config->username = $_SESSION['username'] ?? null;
+        $config->userid = $_SESSION['userid'] ?? null;
+        $config->userGroups = isset($_SESSION['userid']) ? getUserGroups($_SESSION['userid']) : array();
+        $config->userGroupsSimple = isset($_SESSION['userid']) ? getUserGroups($_SESSION['userid'], true) : array();
+        $config->originalPageName = $originalPageName;
+        echo json_encode($config, 128);
+        ?>;</script>
         <?php if ($redirectFrom !== false) { 
             ?><link rel="canonical" href="index.php?title=<?php echo htmlspecialchars(urlencode($originalPageName)); ?>" /><?php
         } ?>
