@@ -74,6 +74,12 @@ else {
                 ?><p>Please log in to edit pages.</p><?php
                 break;
             }
+            if (!canEditPage($originalPageName)[0]) {
+                echo sysmsg("cant-edit-" . canEditPage($originalPageName)[1], htmlspecialchars($originalPageName));
+                echo sysmsg('can-still-view-source');
+                ?><pre><code><?php echo htmlspecialchars(page_get_contents($originalPageName)); ?></code></pre><?php
+                break;
+            }
             $pageIndex = json_decode(file_get_contents("pages/page2ID.json"));
             if (!isset($pageIndex->$originalPageName)) {
                 ?><p>Notice: This page does not exist yet. Saving your edits will create it.</p><?php
@@ -83,9 +89,9 @@ else {
             $title = "$originalPageName - edit";
             if (!isset($_POST['preview'])) {
             ?>
-            <p>You are currently editing <?php echo htmlspecialchars($originalPageName); ?>. Once you publish your changes, they will be publicly viewable immediately. Do not abuse this privilege.</p>
+            <?php echo sysmsg('edit-header', htmlspecialchars($originalPageName)); ?>
             <?php } else {
-                ?><p>Below is a preview. Your page has not been saved yet.</p><?php
+                ?><?php echo sysmsg('preview'); ?><?php
                 require_once __DIR__ . '/markdown/parsedown/parsedown.php';
                 $Parsedown = new Parsedown;
                 echo $Parsedown->text($_POST['contents']);
@@ -106,12 +112,12 @@ else {
             ?>
             <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="post">
                 <label>
-                    Page contents:<div></div>
+                    <?php echo strip_tags(sysmsg('edit-box-label')); ?><div></div>
                     <textarea style="box-sizing: border-box; width: 100%;" rows="10" name="contents"><?php if (isset($_POST['contents'])) echo htmlspecialchars($_POST['contents']); else echo htmlspecialchars(file_get_contents("pages/data/$id/page.md")); ?></textarea>
                 </label>
                 <div></div>
                 <label>
-                    Briefly describe what you changed:<div></div>
+                    <?php echo strip_tags(sysmsg('edit-summary-label')); ?><div></div>
                     <input name="summary" style="box-sizing: border-box; width: 100%;" type="text" value="<?php echo isset($_POST['summary']) ? htmlspecialchars($_POST['summary']) : ""; ?>" />
                 </label>
                 <div></div>
@@ -121,7 +127,7 @@ else {
             <?php
             break;
         default:
-            ?><p>Invalid action parameter. Sorry.</p><?php
+            ?><?php echo sysmsg('invalid-action-parameter', htmlspecialchars($action)); ?><?php
             break;
     }
 }
@@ -158,7 +164,7 @@ $output = ob_get_clean();
         <small id="subheading"><?php echo htmlspecialchars($subheading); ?></small>
         <?php 
         if ($redirectFrom !== false) {
-            ?><div><small id="rdrfrom">Redirected from <a href="index.php?title=<?php echo htmlspecialchars(urlencode($redirectFrom)); ?>&noredirect"><?php echo htmlspecialchars($redirectFrom); ?></a></small>
+            ?><div><small id="rdrfrom"><?php echo sysmsg('redirected', '<a href="index.php?title=' . htmlspecialchars(urlencode($redirectFrom)) . '&noredirect">' . htmlspecialchars($redirectFrom) . '</a>'); ?></small>
         <script>
         const actualPageName = <?php echo json_encode($originalPageName); ?>;
         const url = new URL(location.href);

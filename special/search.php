@@ -5,7 +5,7 @@ require_once __DIR__ . '/../accounts.php';
 require_once __DIR__ . '/../date.php';
 ?>
 <form action="index.php" method="GET">
-            <label><span class="hidden2eyes">Search query: </span>
+            <label><span class="hidden2eyes"><?php echo sysmsg('search-query'); ?> </span>
                 <input type="search" name="query" style="box-sizing: border-box;" value="<?php echo $query; ?>" />
             </label>
         <input type="hidden" name="title" value="Special:search" />

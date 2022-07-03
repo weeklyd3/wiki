@@ -4,12 +4,12 @@ require_once __DIR__ . "/../settings.php";
 global $adminUserGroup;
 if (!in_array($adminUserGroup, $groups)) {
     $title = 'Permission denied';
-    ?><p>You need administrator access to delete pages. Sorry.</p><?php
+    ?><?php echo sysmsg("no-admin-delete-page"); ?><?php
     return;
 }
 if (!isset($_GET['page'])) {
     $title = 'Nothing to delete';
-    ?><p>You need to specify something to throw in the trash.</p><?php
+    ?><?php echo sysmsg('nothing-to-delete'); ?><?php
     return;
 }
 $page2ID = json_decode(file_get_contents(__DIR__ . "/../pages/page2ID.json"));
@@ -19,22 +19,21 @@ if (isset($_POST['delete'])) {
         $oldtitle = $_GET['page'];
         $title = 'Success';
         new logEntry($_SESSION['userid'], null, $_GET['page'], "delete", $_SESSION['username'] . " deleted page $oldtitle", $_POST['reason']);
-        ?><p>The page has been deleted.</p><?php 
+        ?><?php echo sysmsg('deleted'); ?><?php 
         return;
     }
-    ?><div class="error">There seems to be an error. Please make sure you have the sufficient permissions.</div><?php
+    ?><div class="error"><?php echo sysmsg('delete-error'); ?></div><?php
 }
 if (!isset($page2ID->$title)) {
     $title = 'You cannot delete that';
-    ?><p>The page does not exist. Perhaps it was already deleted?</p><?php
+    ?><?php echo sysmsg('cant-delete-that'); ?><?php
     return;
 }
 $title = "Delete $title";
 global $originalPageName;
 ?>
-<p>Are you sure you want to delete the page <strong><?php echo htmlspecialchars($_GET['page']); ?></strong>? Pages can be restored later.</p>
-<p>If this is a file page, the corresponding file will also be permanently deleted.</p>
+<?php echo sysmsg('delete-confirm', htmlspecialchars($_GET['page'])); ?>
 <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="post">
-<label>Reason for deletion: <input type="text" name="reason" value="" required="required" /></label><div></div>
-<input type="submit" name="delete" value="Yes, I am sure" />
+<label><?php echo sysmsg('delete-reason'); ?> <input type="text" name="reason" value="" required="required" /></label><div></div>
+<input type="submit" name="delete" value="<?php echo htmlspecialchars(strip_tags(sysmsg('delete-submit'))); ?>" />
 </form>

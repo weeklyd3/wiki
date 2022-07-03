@@ -39,6 +39,15 @@ define('pagename', $originalPageName);
         global $adminUserGroup;
         global $originalPageName;
         $gr = getUserGroups($_SESSION['userid'], true);
+        if (in_array($adminUserGroup, $gr)) {
+        ?>
+        <form action="index.php" class="inline">
+            <input type="hidden" name="pagename" value="<?php echo htmlspecialchars(pagename); ?>" />
+            <input type="hidden" name="title" value="Special:protect" />
+            <input type="submit" value="Protect" title="<?php if (substr(pagename, 0, 8) === "Special:") { ?>You cannot protect special pages." disabled="disabled" <?php } else { ?>Protect this page, preventing most users from editing it" <?php } ?>/>
+        </form>
+        <?php
+        }
         if (in_array($adminUserGroup, $gr) && isset($pageIndex->$originalPageName)) {
         ?>
         <form action="index.php" class="inline">

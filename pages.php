@@ -9,6 +9,7 @@ class revision {
 }
 function modifyPage(string $name, string $contents, string $editSummary): bool {
     if (!isset($_SESSION['username'])) return false;
+    if (!canEditPage($name)[0]) return false;
     $currentuser = $_SESSION['username'];
     $contents = str_replace("~~~~", "<span class=\"signature\">[[User:$currentuser|$currentuser]] ([[User talk:$currentuser|Leave this user a message]]) " . formatDate(time()) . '</span>', $contents);
     $page2ID = json_decode(file_get_contents(__DIR__ . '/pages/page2ID.json'));
@@ -86,7 +87,7 @@ function displayDeleteLog(string $before): void {
             </tr>
             <?php 
             require_once __DIR__ . "/log/log.php";
-            $entries = queryLog(array('delete', 'undelete'), $originalPageName, false);
+            $entries = queryLog(array('delete', 'undelete', 'protect'), $originalPageName, false);
             foreach ($entries as $entry) {
                 ?>
                     <tr>
@@ -114,4 +115,39 @@ function displayDeleteLog(string $before): void {
 function page_exists(string $title): bool {
     $page2ID = json_decode(file_get_contents(__DIR__ . "/pages/page2ID.json"));
     return isset($page2ID->$title);
+}
+function canEditPage(string $pageName): array {
+    global $adminUserGroup;
+    if (substr($pageName, 0, strlen('Interface:')) === 'Interface:' && !in_array($adminUserGroup, getUserGroups($_SESSION['userid'] ?? '', true))) return array(false, 'interfaceProtected');
+    $protection = json_decode(file_get_contents("protect.json"));
+    if (in_array($pageName, $protection) && !in_array($adminUserGroup, getUserGroups($_SESSION['userid'] ?? '', true))) return array(false, 'adminProtected');
+    return array(true);
+}
+function sysmsg(string $messageName, ...$args): string {
+    if (isset($_GET['messagenames'])) return "(Interface:$messageName)";
+    require_once __DIR__ . "/markdown/parsedown/parsedown.php";
+    $Parsedown = new Parsedown;
+    if (page_get_contents("Interface:$messageName")) {
+        $text = page_get_contents("Interface:$messageName");
+        foreach ($args as $index => $arg) {
+            $indexplusone = $index + 1;
+            $text = str_replace("$$indexplusone", $arg, $text);
+        }
+        return $Parsedown->text($text);
+    }
+    $defaultSystemMessages = json_decode(file_get_contents(__DIR__ . "/defaultinterface.json"));
+    if (isset($defaultSystemMessages->$messageName)) {
+        $text = $defaultSystemMessages->$messageName;
+        foreach ($args as $index => $arg) {
+            $indexplusone = $index + 1;
+            $text = str_replace("$$indexplusone", $arg, $text);
+        }
+        return $Parsedown->text($text);
+    }
+    return htmlspecialchars("System message not found: $messageName");
+}
+function page_get_contents(string $pagename): ?string {
+    $page2ID = json_decode(file_get_contents(__DIR__ . "/pages/page2ID.json"));
+    if (!isset($page2ID->$pagename)) return null;
+    return file_get_contents(__DIR__ . "/pages/data/" . $page2ID->$pagename . "/page.md");
 }
