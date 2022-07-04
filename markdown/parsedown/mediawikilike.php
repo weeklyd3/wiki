@@ -81,15 +81,48 @@ function images(string $text) {
     return substr($html->saveHTML($baudy), 6, -7);
 }
 function wikilinks(string $text) {
-    return preg_replace_callback('/\[\[(.*?)\]\]/i', function($match) {
-        $match = $match[1];
-        $e = explode('|', $match);
-        if (count($e) > 1) $text = $e[count($e) - 1];
-        else $text = $match;
-        if (count($e) === 1) $pagename = $match;
-        else $pagename = implode('|', array_slice($e, 0, count($e) - 1));
-        return '<a href="index.php?title=' . htmlspecialchars(urlencode($pagename)) . '">' . $text . '</a>';
-    }, $text);
+    $doc = new DOMDocument;
+    libxml_use_internal_errors(true);
+    $doc->loadHTML("<!DOCTYPE html><html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><meta charset=\"utf-8\" /></head><body>$text</body></html>");
+    $xpath = new DOMXPath($doc);
+    $textnodes = $xpath->query('//text()');
+    foreach ($textnodes as $node) {
+        $text = $node->textContent;
+        $parentnode = $node->parentNode;
+        while ($parentnode) {
+        	if (isset($parentnode->doctype)) break;
+            if ($parentnode->tagName === 'pre' || $parentnode->tagName === 'code') continue 2;
+            $parentnode = $parentnode->parentNode;
+        }
+        $text = preg_replace_callback("/\[\[(.*?)\]\]/", function($thing) {
+            $link = $thing[1];
+            $exploded = explode('|', $link);
+            if (count($exploded) === 1) {
+                $href = $link;
+                $linktext = $link;
+            } else {
+                $href = array_shift($exploded);
+                $linktext = implode('|', $exploded);
+            }
+            require_once __DIR__ . "/../../pages.php";
+            $rdr = false;
+            $exists = true;
+            if (!page_exists($href)) $exists = false;
+            else {
+                if (substr(page_get_contents($href), 0, strlen('#REDIRECT [[')) === '#REDIRECT [[') $rdr = true;
+            }
+            $link = '<a href="index.php?title=' . htmlspecialchars(urlencode($href)) . '" class="';
+            if ($rdr) $link .= 'redirect';
+            if ($rdr && !$exists) $link .= ' ';
+            if (!$exists) $link .= 'redlink';
+            $link .= '">' . $linktext . '</a>';
+            return $link;
+        }, $text);
+        $docFrag = $doc->createDocumentFragment();
+        $docFrag->appendXML($text);
+        $node->parentNode->replaceChild($docFrag, $node);
+    }
+    return substr($doc->saveHTML($doc->getElementsByTagName('body')->item(0)), 6, -7);
 }
 function redirects($text) {
     $t = explode("\n", $text);
