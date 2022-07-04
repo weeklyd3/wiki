@@ -270,3 +270,9 @@ pre, code {
     border-radius: 7px;
     border: 1px solid;
 }
+.redlink {
+    color: red;
+}
+.redirect {
+    color: #006800;
+}
