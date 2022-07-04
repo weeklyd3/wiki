@@ -105,9 +105,12 @@ function wikilinks(string $text) {
                 $linktext = implode('|', $exploded);
             }
             require_once __DIR__ . "/../../pages.php";
+            require_once __DIR__ . "/../../pageRender.php";
             $rdr = false;
             $exists = true;
             if (!page_exists($href)) $exists = false;
+            $hrefnospecial = substr($href, strlen('Special:'));
+            if (substr($href, 0, strlen('Special:')) === 'Special:') $exists = file_exists(__DIR__ . "/../../special/$hrefnospecial.php");
             else {
                 if (substr(page_get_contents($href), 0, strlen('#REDIRECT [[')) === '#REDIRECT [[') $rdr = true;
             }
