@@ -11,7 +11,7 @@ $protectionList = json_decode(file_get_contents(__DIR__ . "/../protect.json"));
 $protected = in_array($pagename, $protectionList);
 echo sysmsg('protect-status-' . ($protected ? 'protected' : 'unprotected'));
 if (isset($_POST['reason'])) {
-    new logEntry($_SESSION['userid'], null, $pagename, "protect", $_SESSION['userid'] . " protected page $pagename", $_POST['reason']);
+    new logEntry($_SESSION['userid'], null, $pagename, "protect", $_SESSION['username'] . " protected page $pagename", $_POST['reason']);
     if ($protected) $protectionList = array_diff($protectionList, array($pagename));
     else array_push($protectionList, $pagename);
     $title = 'Success';
