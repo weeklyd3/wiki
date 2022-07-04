@@ -1,6 +1,7 @@
 ### weeklyd3's wiki software
 This is a tool I created in PHP to create a wiki without having to set up a bunch of
-PHP extensions and everything.
+PHP extensions and everything. The icons should be the same as the ones on MediaWiki,
+and are [licensed](https://mediawiki.org/wiki/Special:Permalink/4637986) under the GNU General Public License.
 #### Requirements
 It should work with a installation of `sudo dnf install php` plus DOMDocument.
 #### Installing
