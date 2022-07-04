@@ -114,7 +114,7 @@ function wikilinks(string $text) {
             else {
                 if (substr(page_get_contents($href), 0, strlen('#REDIRECT [[')) === '#REDIRECT [[') $rdr = true;
             }
-            $link = '<a href="index.php?title=' . htmlspecialchars(urlencode($href)) . '" class="';
+            $link = '<a href="index.php?title=' . htmlspecialchars(urlencode($href)) . '" class="wikilink ';
             if ($rdr) $link .= 'redirect';
             if ($rdr && !$exists) $link .= ' ';
             if (!$exists) $link .= 'redlink';
