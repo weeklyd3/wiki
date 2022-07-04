@@ -1320,7 +1320,6 @@ class Parsedown
                     'text' => $matches[1],
                     'attributes' => array(
                         'href' => $url,
-                        'class' => 'extlink'
                     ),
                 ),
             );
@@ -1421,6 +1420,7 @@ class Parsedown
             'attributes' => array(
                 'href' => null,
                 'title' => null,
+                'class' => 'extlink'
             ),
         );
 
@@ -1572,6 +1572,7 @@ class Parsedown
                     'text' => $url,
                     'attributes' => array(
                         'href' => $url,
+                        'class' => 'extlink'
                     ),
                 ),
             );
