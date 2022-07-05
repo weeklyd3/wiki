@@ -71,7 +71,7 @@ else {
             break;
         case 'edit':
             if (!isset($_SESSION['username'])) {
-                ?><p>Please log in to edit pages.</p><?php
+                echo sysmsg('login-required');
                 break;
             }
             if (!canEditPage($originalPageName)[0]) {
@@ -82,7 +82,7 @@ else {
             }
             $pageIndex = json_decode(file_get_contents("pages/page2ID.json"));
             if (!isset($pageIndex->$originalPageName)) {
-                ?><p>Notice: This page does not exist yet. Saving your edits will create it.</p><?php
+                echo sysmsg('page-does-not-exist-header');
                 if ($previouslyDeleted) displayDeleteLog("Notice: This page has been previously deleted. Please make sure you aren't creating anything that's deletable under the following");
             }
             $id = $pageIndex->$originalPageName;
