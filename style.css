@@ -278,12 +278,13 @@ pre, code {
 }
 .extlink::after {
     content: "";
-    width: 1em;
+    width: 0.75em;
     height: 1em;
-    margin-left: 4px;
+    margin-left: 2px;
     background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3C!-- Created with Inkscape (http://www.inkscape.org/) --%3E%3Csvg xmlns:svg='http://www.w3.org/2000/svg' xmlns='http://www.w3.org/2000/svg' version='1.0' width='12' height='12' id='svg2'%3E%3Cdefs id='defs4' /%3E%3Crect width='5.9999995' height='6' x='1.5' y='4.5' id='rect3170' style='fill:%23ffffff;fill-opacity:1;fill-rule:nonzero;stroke:%230066cc;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1' /%3E%3Cpath d='M 4,2.5 L 5,3.5 L 5.25,4.25 L 2.75,6.5 L 5.5,9.25 L 7.75,6.75 L 8.5,7 L 9.5,8 L 11,6.5 L 11,1 L 5.5,1 L 4,2.5 z' id='path2395' style='fill:%230066ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' /%3E%3Cpath d='M 6,2 L 10,2 L 10,6 L 9.5,6.75 L 8.25,4.75 L 5.25,8 L 4,6.75 L 7.25,3.75 L 5.25,2.5 L 6,2 z' id='path2398' style='fill:%23ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1' /%3E%3C/svg%3E%0A");
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
     display: inline-block;  
+    vertical-align: bottom;
 }
