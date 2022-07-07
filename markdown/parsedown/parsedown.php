@@ -1,5 +1,6 @@
 <?php
-
+global $originalPageName;
+global $useTemplates;
 #
 #
 # Parsedown Extra
