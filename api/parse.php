@@ -32,7 +32,10 @@ function api(string $action, array $arguments) {
         $res = new stdClass;
         $res->title = $title;
         $res->exists = isset($pageInfo->$title);
-        if (!$res->exists) continue;
+        if (!$res->exists) {
+            $o->$title = $res;
+            continue;
+        }
         $res->pageID = $pageInfo->$title;
         $pageid = $res->pageID;
         $res->markdown = file_get_contents(__DIR__ . "/../pages/data/$pageid/page.md");
