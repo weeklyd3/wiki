@@ -1,8 +1,8 @@
-<?php
+<?php 
 ini_set('session.cookie_samesite', 'None');
 ini_set('session.cookie_secure', 'true');
-header('Access-Control-Allow-Origin', $_GET['origin'] ?? $_SERVER['HTTP_ORIGIN']);
-header('Access-Control-Allow-Credentials', 'true');
+header('Access-Control-Allow-Origin: ' . $_GET['origin'] ?? $_SERVER['HTTP_ORIGIN']);
+header('Access-Control-Allow-Credentials: true');
 session_start(); 
 class apiResponse {
     public $errors = null;
@@ -33,15 +33,9 @@ class apiResponseSuccess extends apiResponse {
         $this->query = $response;
     }
 }
-function cleanFilename($stuff) {
-	$illegal = array(" ","?","/","\\","*","|","<",">",'"');
-	// legal characters
-	$legal = array("-","_","_","_","_","_","_","_","_");
-	$cleaned = str_replace($illegal,$legal,$stuff);
-	return $cleaned;
-}
 $output = null;
-$action = $_GET['action'] ?? 'none';
+require_once 'pageRender.php';
+$action = cleanFilename($_GET['action']) ?? 'none';
 $filteredQuery = $_GET;
 unset($filteredQuery['action']);
 function add_error(string $type, string $cmt, bool $yourFault = true) {
@@ -72,7 +66,7 @@ if (isset($_GET['json'])) {
     header('Content-Type: application/json');
     echo $output;
     exit;
-}
+}  
 ?>
 <!DOCTYPE html>
 <html><head><meta name="viewport" content="width=device-width,initial-scale=1.0" /><title>API Result</title></head><body>

@@ -118,6 +118,7 @@ function page_exists(string $title): bool {
 }
 function canEditPage(string $pageName): array {
     global $adminUserGroup;
+    if (!isset($_SESSION['userid'])) return array(false, 'notLoggedIn');
     if (substr($pageName, 0, strlen('Interface:')) === 'Interface:' && !in_array($adminUserGroup, getUserGroups($_SESSION['userid'] ?? '', true))) return array(false, 'interfaceProtected');
     $protection = json_decode(file_get_contents("protect.json"));
     if (in_array($pageName, $protection) && !in_array($adminUserGroup, getUserGroups($_SESSION['userid'] ?? '', true))) return array(false, 'adminProtected');

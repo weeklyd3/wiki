@@ -88,10 +88,9 @@ else {
             $id = $pageIndex->$originalPageName;
             $title = "$originalPageName - edit";
             if (!isset($_POST['preview'])) {
-            ?>
-            <?php echo sysmsg('edit-header', htmlspecialchars($originalPageName)); ?>
-            <?php } else {
-                ?><?php echo sysmsg('preview'); ?><?php
+                echo sysmsg('edit-header', htmlspecialchars($originalPageName));
+            } else {
+                echo sysmsg('preview');
                 require_once __DIR__ . '/markdown/parsedown/parsedown.php';
                 $Parsedown = new Parsedown;
                 echo $Parsedown->text($_POST['contents']);
