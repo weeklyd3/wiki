@@ -7,6 +7,7 @@ class revision {
         $this->id = $id;
     }
 }
+require_once __DIR__ . "/log/log.php";
 function modifyPage(string $name, string $contents, string $editSummary): bool {
     if (!isset($_SESSION['username'])) return false;
     if (!canEditPage($name)[0]) return false;
