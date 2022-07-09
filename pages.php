@@ -11,6 +11,7 @@ function modifyPage(string $name, string $contents, string $editSummary): bool {
     if (!isset($_SESSION['username'])) return false;
     if (!canEditPage($name)[0]) return false;
     $currentuser = $_SESSION['username'];
+    require_once __DIR__ . "/date.php";
     $contents = str_replace("~~~~", "<span class=\"signature\">[[User:$currentuser|$currentuser]] ([[User talk:$currentuser|Leave this user a message]]) " . formatDate(time()) . '</span>', $contents);
     $page2ID = json_decode(file_get_contents(__DIR__ . '/pages/page2ID.json'));
     if (!isset($page2ID->$name)) {
@@ -118,7 +119,6 @@ function page_exists(string $title): bool {
 }
 function canEditPage(string $pageName): array {
     global $adminUserGroup;
-    if (!isset($_SESSION['userid'])) return array(false, 'notLoggedIn');
     if (substr($pageName, 0, strlen('Interface:')) === 'Interface:' && !in_array($adminUserGroup, getUserGroups($_SESSION['userid'] ?? '', true))) return array(false, 'interfaceProtected');
     $protection = json_decode(file_get_contents("protect.json"));
     if (in_array($pageName, $protection) && !in_array($adminUserGroup, getUserGroups($_SESSION['userid'] ?? '', true))) return array(false, 'adminProtected');
