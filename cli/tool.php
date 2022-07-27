@@ -17,7 +17,5 @@ License along with weeklyd3's wiki software. If not, see
 <https://www.gnu.org/licenses/>. 
 */
 
-define('version', '0.0.1');
-$subheading = 'You are not done yet';
-$useTemplates = false;
-if (file_exists('options.php')) require 'options.php';
+if (php_sapi_name() !== 'cli') exit('Please run this from the command line.');
+if (basename(realpath($_SERVER['SCRIPT_NAME'])) !== 'cli.php') exit("You are not using the CLI properly. Please run php cli.php.");
