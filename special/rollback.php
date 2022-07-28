@@ -55,7 +55,7 @@ if (!canEditPage($page)[0]) {
 $rev = count($revisions) - 1 - $oldrev;
 if (isset($_POST['do-it'])) {
     $author = userinfo($revisions[$oldrev]->author)->username;
-    $summary = "Restored revision $rev by [[User:$author|$author]] ([[User talk:$author|talk]])";
+    $summary = "Restored revision $oldrev by [[User:$author|$author]] ([[User talk:$author|talk]])";
     if ($_POST['summary']) $summary .= ": {$_POST['summary']}";
     $before = file_get_contents(__DIR__ . "/../pages/data/$pageid/pastRevisions/$oldrev/page.md");
     modifyPage($page, $before, $summary);
