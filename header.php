@@ -46,7 +46,7 @@ define('pagename', $originalPageName);
         <form action="index.php" class="inline">
             <input type="hidden" name="title" value="<?php echo htmlspecialchars(pagename); ?>" />
             <input type="hidden" name="action" value="edit" />
-            <input type="submit" value="<?php if (canEditPage(pagename)) echo sysmsgPlain('edit'); else echo sysmsgPlain('view-source'); ?>" title="<?php if (substr(pagename, 0, 8) === "Special:") { ?>You cannot edit special pages." disabled="disabled" <?php } else { ?>Edit this page" <?php } ?>/>
+            <input type="submit" value="<?php if (canEditPage(pagename)[0]) echo sysmsgPlain('edit'); else echo sysmsgPlain('view-source'); ?>" title="<?php if (substr(pagename, 0, 8) === "Special:") { ?>You cannot edit special pages." disabled="disabled" <?php } else { ?>Edit this page" <?php } ?>/>
         </form>
         <form action="index.php" class="inline">
             <input type="hidden" name="title" value="<?php echo htmlspecialchars(pagename); ?>" />
