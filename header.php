@@ -29,9 +29,9 @@ define('pagename', $originalPageName);
             echo userlink($_SESSION['username']);
             $currentUserID = $_SESSION['userid'];
             if (file_exists(__DIR__ . "/users/data/$currentUserID/newMessages.json")) {
-                ?><a class="newmessages" href="index.php?title=User+talk:<?php echo htmlspecialchars(urlencode($_SESSION['username'])); ?>">You have new messages</a><?php
+                ?><a class="newmessages" href="index.php?title=User+talk:<?php echo htmlspecialchars(urlencode($_SESSION['username'])); ?>"><?php echo sysmsgPlain('u-have-new-messages'); ?></a><?php
             }
-            ?> (<a href="index.php?title=Special:logout">log out</a>)<?php
+            ?> (<a href="index.php?title=Special:logout"><?php echo sysmsgPlain('log-out'); ?></a>)<?php
         } else {
             ?> not logged in (<a href="index.php?title=Special:login">log in</a>) (<a href="index.php?title=Special:signup">create account</a>)<?php
         }
@@ -41,19 +41,20 @@ define('pagename', $originalPageName);
     <div id="thispage">
         <form action="index.php" class="inline">
             <input type="hidden" name="title" value="<?php echo htmlspecialchars(pagename); ?>" />
-            <input type="submit" value="View" />
+            <input type="submit" value="<?php echo sysmsgPlain('view-page'); ?>" />
         </form>
         <form action="index.php" class="inline">
             <input type="hidden" name="title" value="<?php echo htmlspecialchars(pagename); ?>" />
             <input type="hidden" name="action" value="edit" />
-            <input type="submit" value="Edit" title="<?php if (substr(pagename, 0, 8) === "Special:") { ?>You cannot edit special pages." disabled="disabled" <?php } else { ?>Edit this page" <?php } ?>/>
+            <input type="submit" value="<?php if (canEditPage(pagename)) echo sysmsgPlain('edit'); else echo sysmsgPlain('view-source'); ?>" title="<?php if (substr(pagename, 0, 8) === "Special:") { ?>You cannot edit special pages." disabled="disabled" <?php } else { ?>Edit this page" <?php } ?>/>
         </form>
         <form action="index.php" class="inline">
             <input type="hidden" name="title" value="<?php echo htmlspecialchars(pagename); ?>" />
             <input type="hidden" name="action" value="history" />
-            <input type="submit" value="Revisions" title="<?php if (substr(pagename, 0, 8) === "Special:") { ?>No history is available for special pages." disabled="disabled" <?php } else { ?>View past revisions of this page" <?php } ?>/>
+            <input type="submit" value="<?php echo sysmsgPlain('history'); ?>" title="<?php if (substr(pagename, 0, 8) === "Special:") { ?>No history is available for special pages." disabled="disabled" <?php } else { ?>View past revisions of this page" <?php } ?>/>
         </form>
         <?php 
+        if (isset($_SESSION['userid'])) {
         global $adminUserGroup;
         global $originalPageName;
         $gr = getUserGroups($_SESSION['userid'], true);
@@ -87,6 +88,7 @@ define('pagename', $originalPageName);
             </form>
             <?php
             }
+        }
         ?>
         <div class="floatright">
             <form action="index.php" method="GET">

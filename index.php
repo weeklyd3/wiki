@@ -74,24 +74,25 @@ else {
             $pageIndex = json_decode(file_get_contents("pages/page2ID.json"));
             if (!isset($pageIndex->$originalPageName)) {
                 ?><p>This page does not exist. There is no history for it.</p><?php
+                return;
             }
             $id = $pageIndex->$originalPageName;
             $rev = json_decode(file_get_contents("pages/data/$id/revisions.json"));
             ?>
             <ul>
-                <?php foreach ($rev as $r) { 
+                <?php foreach ($rev as $index => $r) { 
                 $authorinfo = userinfo($r->author);
                 ?>
-                <li>(<a href="index.php?title=Special:old&page=<?php echo htmlspecialchars(urlencode($originalPageName)); ?>&revision=<?php echo $r->id; ?>">archive</a>) <?php echo formatDate($r->time); ?> by <?php echo userlink($authorinfo->username); ?> (<?php echo htmlspecialchars($r->summary); ?>)</li>
+                <li>(<a href="index.php?title=Special:old&page=<?php echo htmlspecialchars(urlencode($originalPageName)); ?>&revision=<?php echo $r->id; ?>">archive</a>) <?php echo formatDate($r->time); ?> by <?php echo userlink($authorinfo->username); ?> (<?php echo htmlspecialchars($r->summary); ?>)
+                <?php if (isset($rev[$index - 1])) {
+                    ?><span class="restore-link-brackets">[</span><a class="restore-link"
+                        href="index.php?title=Special:rollback&page=<?php echo htmlspecialchars(urlencode($originalPageName)); ?>&revision=<?php echo count($rev) - $index - 1; ?>"><?php echo sysmsgPlain('restore-this-version'); ?></a><span class="restore-link-brackets">]</span><?php
+                } ?></li>
                 <?php } ?>
             </ul>
             <?php
             break;
         case 'edit':
-            if (!isset($_SESSION['username'])) {
-                echo sysmsg('login-required');
-                break;
-            }
             if (!canEditPage($originalPageName)[0]) {
                 echo sysmsg("cant-edit-" . canEditPage($originalPageName)[1], htmlspecialchars($originalPageName));
                 echo sysmsg('can-still-view-source');

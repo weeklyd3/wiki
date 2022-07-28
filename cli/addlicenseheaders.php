@@ -1,6 +1,6 @@
 Adding license headers...
 <?php
-$skip = array("extraload.js", "load.js", "markdown/htmlpurifier/", "markdown/parsedown/parsedown_old.php", "markdown/parsedown/parsedown.php", "markdown/parsedown/LICENSE.txt", "LICENSE", "footer.html", '.json', 'highlight-js', '.md', '.git', '.gitignore');
+$skip = array("extraload.js", "load.js", "markdown/htmlpurifier/", "markdown/parsedown/parsedown_old.php", "markdown/parsedown/parsedown.php", "markdown/parsedown/LICENSE.txt", "LICENSE", "footer.html", '.json', 'highlight-js', '.md', '.git', '.gitignore', 'optionsWarning');
 $formats = array(
     "php" => array("start" => "<?php\n/*", "end" => "*/\n?>"),
     "css" => array("start" => "/*", "end" => "*/")
@@ -59,6 +59,7 @@ function scan($dir = __DIR__ . "/..") {
         echo "Detecting file type... ";
         $filetype = explode('.', $olditem)[count(explode('.', $olditem)) - 1];
         echo $filetype;
+        echo "\n";
         if (!isset($formats[$filetype])) {
             echo "Comment format unknown. Skipping.\n";
             continue;

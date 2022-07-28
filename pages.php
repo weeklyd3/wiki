@@ -138,33 +138,40 @@ function page_exists(string $title): bool {
 }
 function canEditPage(string $pageName): array {
     global $adminUserGroup;
+    if (!isset($_SESSION['userid'])) return array(false, 'loginRequired');
     if (substr($pageName, 0, strlen('Interface:')) === 'Interface:' && !in_array($adminUserGroup, getUserGroups($_SESSION['userid'] ?? '', true))) return array(false, 'interfaceProtected');
     $protection = json_decode(file_get_contents("protect.json"));
     if (in_array($pageName, $protection) && !in_array($adminUserGroup, getUserGroups($_SESSION['userid'] ?? '', true))) return array(false, 'adminProtected');
     return array(true);
 }
 function sysmsg(string $messageName, ...$args): string {
-    if (isset($_GET['messagenames'])) return "(Interface:$messageName)";
     require_once __DIR__ . "/markdown/parsedown/parsedown.php";
     $Parsedown = new Parsedown;
+    return $Parsedown->text(sysmsg_raw($messageName, ...$args));
+}
+function sysmsgPlain(string $messageName, ...$args): string {
+    return htmlspecialchars(sysmsg_raw($messageName, ...$args));
+}
+function sysmsg_raw(string $messageName, ...$args): string {
+    if (isset($_GET['messagenames'])) return "(Interface:$messageName)";
     if (page_get_contents("Interface:$messageName")) {
         $text = page_get_contents("Interface:$messageName");
-        foreach ($args as $index => $arg) {
+        foreach (array_reverse($args, true) as $index => $arg) {
             $indexplusone = $index + 1;
             $text = str_replace("$$indexplusone", $arg, $text);
         }
-        return $Parsedown->text($text);
+        return $text;
     }
     $defaultSystemMessages = json_decode(file_get_contents(__DIR__ . "/defaultinterface.json"));
     if (isset($defaultSystemMessages->$messageName)) {
         $text = $defaultSystemMessages->$messageName;
-        foreach ($args as $index => $arg) {
+        foreach (array_reverse($args, true) as $index => $arg) {
             $indexplusone = $index + 1;
             $text = str_replace("$$indexplusone", $arg, $text);
         }
-        return $Parsedown->text($text);
+        return $text;
     }
-    return htmlspecialchars("System message not found: $messageName");
+    return "System message not found: $messageName";
 }
 function page_get_contents(string $pagename): ?string {
     $page2ID = json_decode(file_get_contents(__DIR__ . "/pages/page2ID.json"));
