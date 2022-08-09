@@ -92,7 +92,8 @@ function login(string $username, string $password): int {
     return 2;
 }
 function userlink(string $username): string {
-    return '<a href="index.php?title=User:' . htmlspecialchars(urlencode($username)) . '">' . htmlspecialchars($username) . '</a> (<a href="index.php?title=User+talk:' . htmlspecialchars(urlencode($username)) . '">leave a message</a>)';
+    require_once __DIR__ . "/markdown/parsedown/mediawikilike.php";
+    return wikilinks("[[User:$username|$username]] ([[User talk:$username|leave a message]])");
 }
 function getUserGroups(?int $user, bool $plain = false): ?array {
     if (!isset($user)) return array();
