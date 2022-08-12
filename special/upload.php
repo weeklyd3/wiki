@@ -20,7 +20,7 @@ License along with weeklyd3's wiki software. If not, see
 $title = 'Upload file';
 if (!isset($_SESSION['username'])) {
     $title = 'Please log in';
-    ?><div class="error">Please log in to upload files.</div><?php
+    ?><div class="error"><?php echo sysmsgPlain('upload-please-login'); ?></div><?php
     return;
 }
 require_once __DIR__ . "/../pages.php";
