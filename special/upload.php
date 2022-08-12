@@ -24,21 +24,8 @@ if (!isset($_SESSION['username'])) {
     return;
 }
 require_once __DIR__ . "/../pages.php";
-if (file_exists(__DIR__ . "/../licenses.json")) $licenses = json_decode(file_get_contents(__DIR__ . "/../licenses.json"));
-else $licenses = array(
-    "Creative Commons Attribution-ShareAlike 4.0" => "CC BY-SA 4.0",
-    "Creative Commons Attribution 4.0" => "CC BY 4.0",
-    "Creative Commons Attribution-ShareAlike 3.0" => "CC BY-SA 3.0",
-    "Creative Commons Attribution 3.0" => "CC BY 3.0",
-    "Creative Commons Attribution-ShareAlike 2.0" => "CC BY-SA 2.0",
-    "Creative Commons Attribution 2.0" => "CC BY 2.0",
-    "Creative Commons Attribution-ShareAlike 1.0" => "CC BY-SA 1.0",
-    "Creative Commons Attribution 1.0" => "CC BY 1.0",
-    "Public domain" => "PD",
-    "GFDL 1.3" => "FDL-1.3",
-    "Other free cultural license (in description)" => "Other"
-);
-function upload($licenses) {
+$licenses = explode("\n", sysmsgPlain('license-list'));
+function upload() {
     $destname = cleanFilename($_POST['destname']);
     if (substr($destname, -4) === '.php') {
         ?><div class="error">Due to people uploading PHP files and then linking to them to execute them, you cannot upload PHP files. Sorry. Try giving it another extension like txt.</div><?php
@@ -50,16 +37,16 @@ function upload($licenses) {
         return;
     }
     if (move_uploaded_file($_FILES['file']['tmp_name'], __DIR__ . "/../files/live/$destname")) {
-        $license = array_flip($licenses)[$_POST['license']];
+        $license = $_POST['license'];
         modifyPage("File:$destname", "## License\nThis file's license: **{$license}**\n## Description\n" . $_POST['desc'], "Adding file description page while uploading file {$destname}.");
         header('Location: index.php?title=File:' . urlencode($destname));
         exit;
     } else {
-        ?><div class="error">An error occurred while uploading your file. Sorry! This could be because your file was over the maximum file size permitted by the server, which should be shown below.</div><?php 
+        ?><div class="error"><?php echo sysmsgPlain('file-upload-failed'); ?></div><?php 
         return;
     }
 }
-if (isset($_POST['upload'])) upload($licenses);
+if (isset($_POST['upload'])) upload();
 echo sysmsg("upload-header", ini_get('upload_max_filesize'));
 ?>
 <form action="index.php?title=Special:upload" method="post" enctype="multipart/form-data">
