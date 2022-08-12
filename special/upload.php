@@ -60,51 +60,34 @@ function upload($licenses) {
     }
 }
 if (isset($_POST['upload'])) upload($licenses);
+echo sysmsg("upload-header", ini_get('upload_max_filesize'));
 ?>
-<p>You can use this form to upload files to the wiki. Please do not violate copyright by
-   making unauthorized copies of files found on the Internet without permission from the 
-   creator, as that will force us to take your file down.</p>
-<p>Note that due to technical restrictions, the maximum file size is <strong><?php echo ini_get('upload_max_filesize'); ?></strong></p>
-<h2>File upload form</h2>
 <form action="index.php?title=Special:upload" method="post" enctype="multipart/form-data">
 <style>#page-content label, #page-content input, #page-content textarea { box-sizing: border-box; display: block; } </style>
-<label>Choose a file to upload:
+<label><span class="help" title="<?php echo sysmsgPlain('file-upload-label-one-help'); ?>"><?php echo sysmsgPlain('file-upload-help'); ?></span> <?php echo sysmsgPlain('file-upload-label-one'); ?>
     <input type="file" name="file" required="required" />
 </label>
-<label>Location of file on server (MUST BE UNIQUE): <input name="destname" required="required" value="<?php if (isset($_POST['destname'])) echo htmlspecialchars($_POST['destname']); ?>" /></label>
-<h2>Details</h2>
-<h3>Copyright</h3>
-<p>We need some information to determine if we are authorized to use this file.</p>
+<label><span class="help" title="<?php echo sysmsgPlain('file-upload-label-two-help'); ?>"><?php echo sysmsgPlain('file-upload-help'); ?></span> <?php echo sysmsgPlain('file-upload-label-two'); ?>
+    <input name="destname" required="required" value="<?php if (isset($_POST['destname'])) echo htmlspecialchars($_POST['destname']); ?>" /></label>
+<?php echo sysmsg('file-upload-details-copyright'); ?>
 <label>
-    What license is this file available under?
+    <span class="help" title="<?php echo sysmsgPlain('file-upload-license-dropdown-help'); ?>"><?php echo sysmsgPlain('file-upload-help'); ?></span>
+    <?php echo sysmsgPlain('license-dropdown-label'); ?>
     <select required="required" name="license">
-    <option disabled="disabled" selected="selected">Choose a license</option>
+    <option disabled="disabled" selected="selected" value=""><?php echo sysmsgPlain('file-upload-license-placeholder'); ?></option>
     <?php 
-    if (file_exists(__DIR__ . "/../licenses.json")) $licenses = json_decode(file_get_contents(__DIR__ . "/../licenses.json"));
-    else $licenses = array(
-        "Creative Commons Attribution-ShareAlike 4.0" => "CC BY-SA 4.0",
-        "Creative Commons Attribution 4.0" => "CC BY 4.0",
-        "Creative Commons Attribution-ShareAlike 3.0" => "CC BY-SA 3.0",
-        "Creative Commons Attribution 3.0" => "CC BY 3.0",
-        "Creative Commons Attribution-ShareAlike 2.0" => "CC BY-SA 2.0",
-        "Creative Commons Attribution 2.0" => "CC BY 2.0",
-        "Creative Commons Attribution-ShareAlike 1.0" => "CC BY-SA 1.0",
-        "Creative Commons Attribution 1.0" => "CC BY 1.0",
-        "Public domain" => "PD",
-        "GFDL 1.3" => "FDL-1.3",
-        "Other free cultural license (in description)" => "Other"
-    );
-    foreach ($licenses as $label => $license) {
+    $licenses = explode("\n", sysmsgPlain('license-list'));
+    foreach ($licenses as $license) {
         ?><option <?php 
         if ($_POST['license'] === $license) { ?>selected="selected" <?php } 
-        ?>value="<?php echo htmlspecialchars($license); ?>"><?php echo htmlspecialchars($label); ?></option><?php
+        ?>value="<?php echo htmlspecialchars($license); ?>"><?php echo htmlspecialchars($license); ?></option><?php
     }
     ?>
     </select>
 </label>
-<h3>Description</h3>
-<label>Enter a few details about your file:
+<?php echo sysmsg('file-upload-description-heading'); ?>
+<label><span class="help" title="<?php echo sysmsgPlain('file-upload-description-help'); ?>"><?php echo sysmsgPlain('file-upload-help'); ?></span> <?php echo sysmsgPlain('file-upload-description-label'); ?>
     <textarea name="desc" rows="10" style="width: 100%;"><?php if (isset($_POST['desc'])) echo htmlspecialchars($_POST['desc']); ?></textarea>
 </label>
-<input type="submit" name="upload" value="Upload this file" />
+<input type="submit" name="upload" value="<?php echo sysmsgPlain('file-upload-submit'); ?>" />
 </form>

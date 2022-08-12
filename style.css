@@ -305,3 +305,7 @@ pre, code {
     display: inline-block;  
     vertical-align: bottom;
 }
+.help {
+    border-bottom: 1px dotted black;
+    background-color: gold;
+}
