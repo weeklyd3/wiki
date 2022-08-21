@@ -22,7 +22,7 @@ $title = 'Patrol recent changes';
 <p>You can review recent edits here.</p>
 <noscript id="no-js">
 <?php 
-require __DIR__ . "/getrecentedits.php";
+require_once __DIR__ . "/getrecentedits.php";
 ?>
 </noscript>
 <div id="yes-js" hidden="hidden">

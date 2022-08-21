@@ -28,7 +28,6 @@ require_once __DIR__ . '/../date.php';
             </label>
         <input type="hidden" name="title" value="Special:search" />
         <input type="submit" value="Search" />
-    </div>
 </form>
 <?php 
 if (!$query) {

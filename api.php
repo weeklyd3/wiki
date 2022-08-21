@@ -71,7 +71,7 @@ function set_response($response) {
     $output->query = $response;
 }
 if (file_exists("api/$action.php")) {
-    require "api/$action.php";
+    require_once "api/$action.php";
     $output = new apiResponse;
     api($action, $filteredQuery);
 }

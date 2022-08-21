@@ -37,7 +37,7 @@ if (!isset($revisions[$revid])) {
 <p>Note: This is an old version of the page. For the newest version, <a href="index.php?title=<?php echo htmlspecialchars(urlencode($pagetitle)); ?>">go to the latest revision</a>.</p>
 <h2>Diff with previous version</h2>
 <?php
-require 'diff.php';
+require_once 'diff.php';
 $oldrevid = $revid - 1;
 if ($revid - 1 >= 0) $old = file_get_contents(__DIR__ . "/../pages/data/$id/pastRevisions/$oldrevid/page.md");
 else $old = '';

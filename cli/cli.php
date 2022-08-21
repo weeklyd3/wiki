@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public
 License along with weeklyd3's wiki software. If not, see 
 <https://www.gnu.org/licenses/>. 
 */
- require 'tool.php';
+ require_once 'tool.php';
 function cleanFilename($stuff) {
 	$illegal = array(" ","?","/","\\","*","|","<",">",'"');
 	$legal = array("-","_","_","_","_","_","_","_","_");
@@ -29,4 +29,4 @@ echo "wiki CLI (c) 2022 weeklyd3. May be distributed under the terms of the GNU 
 echo "Module to run: $module\n";
 if (!file_exists(__DIR__ . "/$module.php")) die("Fatal: Module not found. Stopping.\n");
 echo "Running module $module...\n";
-require "$module.php";
+require_once "$module.php";

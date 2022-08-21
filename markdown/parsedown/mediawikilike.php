@@ -128,7 +128,7 @@ function wikilinks(string $text) {
             $exists = true;
             if (!page_exists($href)) $exists = false;
             $hrefnospecial = substr($href, strlen('Special:'));
-            if (substr($href, 0, strlen('Special:')) === 'Special:') $exists = file_exists(__DIR__ . "/../../special/$hrefnospecial.php");
+            if (substr($href, 0, strlen('Special:')) === 'Special:') $exists = special_page_exists($hrefnospecial);
             else {
                 if (substr(page_get_contents($href), 0, strlen('#REDIRECT [[')) === '#REDIRECT [[') $rdr = true;
             }

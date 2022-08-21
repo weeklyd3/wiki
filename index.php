@@ -21,10 +21,10 @@ ini_set('session.cookie_samesite', 'None');
 ini_set('session.cookie_secure', 'true');
 ob_start();
 session_start();
-require 'settings.php';
-require 'accounts.php';
-require 'pages.php';
-require 'date.php';
+require_once 'pages.php';
+require_once 'settings.php';
+require_once 'accounts.php';
+require_once 'date.php';
 global $useTemplates;
 if (!isset($_GET['title'])) header("Location: index.php?title=Main Page");
 $title = $_GET['title'] ?? 'Main Page';
@@ -37,7 +37,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : "";
 $deletedPageIndex = json_decode(file_get_contents(__DIR__ . "/deleted-pages/page2IDs.json"));
 if (!isset($deletedPageIndex->$originalPageName)) $previouslyDeleted = false;
 else $previouslyDeleted = true;
-require 'pageRender.php';
+require_once 'pageRender.php';
 if (substr($originalPageName, 0, strlen('User talk:')) === 'User talk:' && isset($_SESSION['username'])) { 
     $userTalkPageName = substr($originalPageName, strlen('User talk:'));
     $currentUserID = $_SESSION['userid'];
@@ -177,7 +177,7 @@ $output = ob_get_clean();
     </head>
     <body id="baudy">
         <script>const pageTitle = <?php echo json_encode($originalPageName); ?>;</script>
-        <?php require 'header.php'; ?>
+        <?php require_once 'header.php'; ?>
         <h1 id="taitl"><?php echo htmlspecialchars($title); ?></h1>
         <small id="subheading"><?php echo htmlspecialchars($subheading); ?></small>
         <?php 
@@ -192,6 +192,6 @@ $output = ob_get_clean();
         }
         ?>
         <div id="page-content"><?php echo $output; ?></div>
-        <footer><?php require 'footer.html'; ?></footer>
+        <footer><?php require_once 'footer.html'; ?></footer>
     </body>
 </html>

@@ -75,7 +75,7 @@ if (isset($_POST['preview'])) {
         <fieldset>
             <legend>Preview of page to restore (<?php echo count($revs); ?> revision<?php if (count($revs) !== 1) { ?>s<?php } ?>)</legend>
             <?php 
-            require __DIR__ . "/../markdown/parsedown/parsedown.php";
+            require_once __DIR__ . "/../markdown/parsedown/parsedown.php";
             $Parsedown = new Parsedown;
             echo $Parsedown->text(file_get_contents(__DIR__ . "/../deleted-pages/data/$deleteID/page.md"));
             ?>

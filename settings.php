@@ -20,4 +20,4 @@ License along with weeklyd3's wiki software. If not, see
 define('version', '0.0.1');
 $subheading = 'You are not done yet';
 $useTemplates = false;
-if (file_exists('options.php')) require 'options.php';
+if (file_exists('options.php')) require_once 'options.php';

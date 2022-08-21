@@ -152,6 +152,7 @@ function sysmsg(string $messageName, ...$args): string {
 function sysmsgPlain(string $messageName, ...$args): string {
     return htmlspecialchars(sysmsg_raw($messageName, ...$args));
 }
+$defaultSystemMessages = json_decode(file_get_contents(__DIR__ . "/defaultinterface.json"));
 function sysmsg_raw(string $messageName, ...$args): string {
     if (isset($_GET['messagenames'])) return "(Interface:$messageName)";
     if (page_get_contents("Interface:$messageName")) {
@@ -162,7 +163,7 @@ function sysmsg_raw(string $messageName, ...$args): string {
         }
         return $text;
     }
-    $defaultSystemMessages = json_decode(file_get_contents(__DIR__ . "/defaultinterface.json"));
+    global $defaultSystemMessages;
     if (isset($defaultSystemMessages->$messageName)) {
         $text = $defaultSystemMessages->$messageName;
         foreach (array_reverse($args, true) as $index => $arg) {
@@ -177,4 +178,40 @@ function page_get_contents(string $pagename): ?string {
     $page2ID = json_decode(file_get_contents(__DIR__ . "/pages/page2ID.json"));
     if (!isset($page2ID->$pagename)) return null;
     return file_get_contents(__DIR__ . "/pages/data/" . $page2ID->$pagename . "/page.md");
+}
+global $specialPages;
+$specialPages = array();
+foreach (scandir("special/", SCANDIR_SORT_NONE) as $page) {
+    if ($page === "." || $page === '..') continue;
+    add_special_page(substr($page, 0, -4), __DIR__ . "/special/$page");
+}
+function add_special_page($name, $filename) {
+    global $specialPages;
+    $specialPages[$name] = $filename;
+}
+function special_page_exists(string $specialPage): bool {
+    global $specialPages;
+    return isset($specialPages[$specialPage]);
+}
+function loadExtension(string $extname) {
+    if (!is_dir(__DIR__ . "/extensions/$extname")) {         
+        echo sysmsg('invalid-extension', $extname);
+        return;
+    }
+    if (!file_exists(__DIR__ . "/extensions/$extname/index.php")) {
+        echo sysmsg('malformed-extension', $extname);
+        return;
+    }
+    require __DIR__ . "/extensions/$extname/index.php";
+}
+function add_system_messages(string $filename): bool {
+    global $defaultSystemMessages;
+    if (!file_exists($filename)) return false;
+    $messages = json_decode(file_get_contents($filename));
+    if (!$messages) return false;
+    $messages = (array) $messages;
+    foreach ($messages as $name => $message) {
+        $defaultSystemMessages->$name = $message;
+    }
+    return true;
 }

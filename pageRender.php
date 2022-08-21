@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public
 License along with weeklyd3's wiki software. If not, see 
 <https://www.gnu.org/licenses/>. 
 */
-
 global $previouslyDeleted;
 global $originalPageName;
 global $useTemplates;
@@ -33,10 +32,12 @@ function renderPage(string $namespace, string $title) {
     switch ($namespace) {
         case 'Special':
             $specialPageFileName = cleanFilename(substr($title, 8));
-            if (!file_exists("special/$specialPageFileName.php")) $specialPageFileName = 'invalid';
+            if (!special_page_exists($specialPageFileName)) $specialPageFileName = 'invalid';
             $pageName = $title;
             $pageNamespace = $namespace;
-            require "special/$specialPageFileName.php";
+            require_once __DIR__ . "/pages.php";
+            global $specialPages;
+            require_once $specialPages[$specialPageFileName];
             break;
         case "File":
             // Note the intentional absence of the break statement. This is required to
@@ -55,7 +56,7 @@ function renderPage(string $namespace, string $title) {
             }
         default:
             global $originalPageName;
-            require __DIR__ . '/markdown/parsedown/parsedown.php';
+            require_once __DIR__ . '/markdown/parsedown/parsedown.php';
             $Parsedown = new Parsedown;
             $pageIndex = json_decode(file_get_contents("pages/page2ID.json"));
             if (!isset($pageIndex->$title)) {

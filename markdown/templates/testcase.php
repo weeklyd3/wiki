@@ -20,7 +20,7 @@ License along with weeklyd3's wiki software. If not, see
 if (php_sapi_name() !== "cli") {
     exit('Please run this from the CLI SAPI. Like, php ' . __FILE__);
 }
-require 'parser.php';
+require_once 'parser.php';
 ?>
 TEST 1 - Simple template
 ========================
