@@ -1,10 +1,5 @@
 <?php
 add_system_messages(__DIR__ . "/messages.json");
-if (!isset($_SESSION['username'])) {
-    $title = sysmsg_raw("wiki-auth-login-title");
-    echo sysmsg('wiki-auth-log-in');
-    return;
-}
 $hash = hash('sha224', uniqid("", true));
 require __DIR__ . "/ids.php";
 $fileContents = "<?php\n// This file is automatically modified. Please be careful!\nglobal \$authenticationData;\n\$authenticationData = ";
@@ -24,6 +19,11 @@ if (isset($_GET['getdata'])) {
         fwrite(fopen(__DIR__ . "/ids.php", "w+"), $fileContents);
     }
     exit;
+}
+if (!isset($_SESSION['username'])) {
+    $title = sysmsg_raw("wiki-auth-login-title");
+    echo sysmsg('wiki-auth-log-in');
+    return;
 }
 $isadmin = false;
 global $adminUserGroup;
