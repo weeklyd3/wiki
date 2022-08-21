@@ -30,7 +30,7 @@ global $adminUserGroup;
 global $originalPageName;
 $gr = getUserGroups($_SESSION['userid'], true);
 if (in_array($adminUserGroup, $gr)) $isadmin = true;
-$authenticationData[$hash] = array("time" => time(), "name" => $_SESSION['username'], "isadmin" => $isadmin, "userid" => $_SESSION['userid']);
+$authenticationData[$hash] = array("time" => time(), "name" => $_SESSION['username'], "isadmin" => $isadmin, "userid" => $_SESSION['userid'], "creationDate" => userinfo($_SESSION['userid'])->creationDate);
 ob_start();
 var_export($authenticationData);
 $exported = ob_get_clean();
