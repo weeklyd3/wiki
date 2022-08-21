@@ -25,7 +25,12 @@ if (isset($_GET['getdata'])) {
     }
     exit;
 }
-$authenticationData[$hash] = array("time" => time(), "name" => $_SESSION['username']);
+$isadmin = false;
+global $adminUserGroup;
+global $originalPageName;
+$gr = getUserGroups($_SESSION['userid'], true);
+if (in_array($adminUserGroup, $gr)) $isadmin = true;
+$authenticationData[$hash] = array("time" => time(), "name" => $_SESSION['username'], "isadmin" => $isadmin, "userid" => $_SESSION['userid']);
 ob_start();
 var_export($authenticationData);
 $exported = ob_get_clean();
