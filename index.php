@@ -21,6 +21,7 @@ ini_set('session.cookie_samesite', 'None');
 ini_set('session.cookie_secure', 'true');
 ob_start();
 session_start();
+require 'scripts.php';
 require_once 'pages.php';
 require_once 'settings.php';
 require_once 'accounts.php';
@@ -156,9 +157,13 @@ $output = ob_get_clean();
     <head>
         <meta name="viewport" content="width=device-width,initial-scale=1.0" />
         <title><?php echo htmlspecialchars($title); ?></title>
-        <link rel="stylesheet" href="style.css" />
+        <?php
+        foreach ($stylesheets as $stylesheet) {
+            ?><link rel="stylesheet" href="<?php echo htmlspecialchars($stylesheet); ?>" /><?php
+            echo "\n";
+        }
+        ?>
         <script src="highlight-js/highlight.min.js"></script>
-        <link rel="stylesheet" href="highlight-js/vs.min.css" />
         <script>const config = <?php 
         $config = new stdClass;
         $config->loggedIn = isset($_SESSION['username']);
@@ -169,9 +174,13 @@ $output = ob_get_clean();
         $config->originalPageName = $originalPageName;
         echo json_encode($config, 128);
         ?>; window.config = config;</script>
-        <script src="load.js"></script>
-        <script src="extraload.js"></script>
-        <?php if ($redirectFrom !== false) { 
+        <?php 
+        foreach ($scripts as $url) {
+            ?><script src="<?php echo htmlspecialchars($url); ?>"></script><?php
+            echo "\n";
+        }
+        
+        if ($redirectFrom !== false) { 
             ?><link rel="canonical" href="index.php?title=<?php echo htmlspecialchars(urlencode($originalPageName)); ?>" /><?php
         } ?>
     </head>

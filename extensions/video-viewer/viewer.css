@@ -1,0 +1,56 @@
+.video-player-modal-holder {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.video-player {
+    padding: 7px;
+    position: fixed;
+    top: 50%;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid;
+}
+.video-player:not(.setting) {
+    width: 75%;
+}
+.video-player .video-holder {
+    background-color: black;
+}
+.video-player video {
+    text-align: center;
+    max-width: 75vw;
+    max-height: 75vh;
+}
+.video-player .slider-container {
+    display: table;
+    width: 100%;
+}
+.video-player .slider {
+    text-align: left;
+    display: table-row;
+    width: 100%;
+}
+.video-player .slider .time {
+    display: table-cell;
+    width: 0px;
+    vertical-align: middle;
+}
+.video-player .slider .actual-slider {
+    display: table-cell;
+}
+.video-player input[type=range] {
+    width: 100%;
+}
+.video-player .controls button {
+    border-radius: 0;
+    box-shadow: none !important;
+    width: 25%;
+}
+.video-player * {
+    box-sizing: border-box;
+}

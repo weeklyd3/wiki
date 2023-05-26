@@ -83,9 +83,20 @@ $options = array(
         "type" => "textarea",
         "description" => "Site footer code",
         "default" => file_get_contents(__DIR__ . '/../footer.html')
+    ),
+    "extensions" => array(
+        "type" => "label",
+        "default" => "Choose extensions to enable"
     )
 );
-
+$extensions = array_diff(scandir('extensions/'), array('.', '..'));
+foreach ($extensions as $extension) {
+    if (!is_dir("extensions/$extension")) continue;
+    $options["extension-$extension"] = array(
+        "type" => "checkbox",
+        "description" => "Enable extension $extension"
+    );
+}
 $title = 'Set up your wiki';
 if (isset($_POST['install'])) {
     $title = 'Installing wiki';
@@ -96,6 +107,13 @@ if (isset($_POST['install'])) {
             ?><li>Writing footer code... <?php
             fwrite(fopen(__DIR__ . '/../footer.html', 'w+'), $_POST['footer']);
             ?>DONE</li><?php
+            continue;
+        }
+        if (substr($name, 0, strlen('extension-')) === 'extension-') {
+            $ext = substr($name, strlen('extension-'));
+            ?><li>Adding extension: <?php echo htmlspecialchars($ext); ?></li><?php
+            $extName = getExport($ext);
+            $settingsFileText .= "// Loads extension $ext.\nloadExtension($extName);\n";
             continue;
         }
         if ($name === 'username' || $name === 'install' || $name === 'password') continue;
@@ -135,6 +153,10 @@ foreach ($options as $label => $option) {
         <th class="install-label"><label for="option<?php echo htmlspecialchars($label); ?>"><?php echo $option['description']; ?></label></th>
         <td><?php 
         switch ($option['type']) {
+            case 'checkbox': 
+                ?>
+                <input name="<?php echo htmlspecialchars($label); ?>" id="option<?php echo htmlspecialchars($label); ?>" type="checkbox" /><?php
+                break;
             case 'textarea':
                 ?><textarea required="required" rows="5" cols="50" name="<?php echo htmlspecialchars($label); ?>" id="option<?php echo htmlspecialchars($label); ?>"><?php if (isset($option['default'])) echo htmlspecialchars($option['default']); ?></textarea><?php
                 break;

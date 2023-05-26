@@ -1,5 +1,5 @@
 {
-    "license": "GPL-2.0-or-later",
+    "license": "GPL-3.0-or-later",
     "name": "Wiki Auth",
     "description": "Allows other sites to get usernames from your wiki, avoiding separate account creation.",
     "author": "weeklyd3/wiki contributors"
