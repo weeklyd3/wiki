@@ -43,7 +43,7 @@ if (!isset($_GET['appname'], $_GET['callback'])) {
 }
 $callbackurl = $_GET['callback'];
 if (parse_url($callbackurl, PHP_URL_QUERY) !== null) $callbackurl .= "&authentication-token=" . $hash;
-else $callbackurl .= "?authentication-token" . $hash;
+else $callbackurl .= "?authentication-token=" . $hash;
 if (isset($_GET['failure-callback'])) echo sysmsg('wiki-auth-confirm-with-fail', $_GET['appname'], $callbackurl, $_GET['failure-callback']);
 else {  
     echo sysmsg('wiki-auth-confirm', $_GET['appname'], $callbackurl);
